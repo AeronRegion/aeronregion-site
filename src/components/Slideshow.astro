@@ -1,0 +1,76 @@
+---
+// Simple slideshow: arrows, dots, swipe (native scroll-snap), and a slow
+// auto-advance that pauses on hover/focus and is off for reduced-motion users.
+const { slides, label = 'Photos' } = Astro.props as { slides: { src: string; caption: string }[]; label?: string };
+---
+<section class="show" aria-roledescription="carousel" aria-label={label}>
+  <div class="track" tabindex="0">
+    {slides.map((s, i) => (
+      <figure class="slide" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`}>
+        <img src={s.src} alt={s.caption} loading={i === 0 ? 'eager' : 'lazy'} />
+        <figcaption><span class="nametag">{s.caption}</span></figcaption>
+      </figure>
+    ))}
+  </div>
+  <button class="nav prev block stone" type="button" aria-label="Previous photo">‹</button>
+  <button class="nav next block stone" type="button" aria-label="Next photo">›</button>
+  <div class="dots" role="tablist">
+    {slides.map((_, i) => <button type="button" aria-label={`Show photo ${i + 1}`} aria-current={i === 0 ? 'true' : undefined}></button>)}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.show').forEach((show) => {
+    const track = show.querySelector<HTMLElement>('.track')!;
+    const slides = [...show.querySelectorAll<HTMLElement>('.slide')];
+    const dots = [...show.querySelectorAll<HTMLButtonElement>('.dots button')];
+    let i = 0;
+    const go = (n: number) => {
+      i = (n + slides.length) % slides.length;
+      track.scrollTo({ left: slides[i].offsetLeft, behavior: 'smooth' });
+    };
+    track.addEventListener('scroll', () => {
+      const n = Math.round(track.scrollLeft / track.clientWidth);
+      if (n !== i) i = n;
+      dots.forEach((d, k) => d.toggleAttribute('aria-current', k === i));
+    }, { passive: true });
+    show.querySelector('.prev')!.addEventListener('click', () => go(i - 1));
+    show.querySelector('.next')!.addEventListener('click', () => go(i + 1));
+    dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') go(i + 1);
+      if (e.key === 'ArrowLeft') go(i - 1);
+    });
+
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let paused = false;
+      ['mouseenter', 'focusin'].forEach((ev) => show.addEventListener(ev, () => (paused = true)));
+      ['mouseleave', 'focusout'].forEach((ev) => show.addEventListener(ev, () => (paused = false)));
+      setInterval(() => { if (!paused && !document.hidden) go(i + 1); }, 6000);
+    }
+  });
+</script>
+
+<style>
+  .show { position: relative; border: 4px solid #000; background: #000; }
+  .track {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; aspect-ratio: 16 / 7.5;
+  }
+  .track::-webkit-scrollbar { display: none; }
+  .slide { flex: 0 0 100%; margin: 0; position: relative; scroll-snap-align: start; }
+  .slide img { width: 100%; height: 100%; object-fit: cover; }
+  figcaption { position: absolute; left: 1rem; bottom: 2.6rem; font-size: 1.05rem; }
+  figcaption .nametag { font-family: var(--font-ui); font-weight: 700; background: rgb(0 0 0 / .6); padding: .25rem .6rem; }
+  .nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 1.8rem; line-height: 1; padding: .2rem .7rem .4rem; }
+  .prev { left: .75rem; }
+  .next { right: .75rem; }
+  .dots { position: absolute; bottom: .8rem; left: 0; right: 0; display: flex; justify-content: center; gap: .4rem; }
+  .dots button { width: 12px; height: 12px; padding: 0; border: 2px solid #000; background: rgb(255 255 255 / .5); cursor: pointer; }
+  .dots button[aria-current] { background: var(--blossom); }
+  @media (max-width: 640px) {
+    .track { aspect-ratio: 4 / 3; }
+    .nav { display: none; }
+    figcaption { font-size: .9rem; left: .5rem; }
+  }
+</style>

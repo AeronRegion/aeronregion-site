@@ -7,7 +7,6 @@ import { site, mainServer, socials, stores, experimental } from '../config/site'
 import { posts } from '../lib/news';
 const latest = posts.slice(0, 4);
 const discord = socials.find((s) => s.icon === 'discord')!;
-const challonge = socials.find((s) => s.icon === 'trophy')!;
 ---
 <Base>
   <!-- HERO: the community screenshot, with the name floating above the crowd like a nametag. -->
@@ -31,7 +30,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
   <section class="wrap split">
     <div class="intro">
       <p class="lede">{mainServer.pack} {mainServer.packVersion}, with a gym league, tournaments, and a second modded server that tries a new modpack every month. Apply for your own gym, challenge the league, or just build something nice with a community.</p>
-      <p><a href={challonge.href} target="_blank" rel="noopener">Tournament brackets on Challonge</a></p>
+      <p><a href="/tournaments/">Tournaments, brackets and results</a></p>
 
       {latest.length > 0 && (
         <>
