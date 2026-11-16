@@ -1,0 +1,45 @@
+---
+import { site, socials, stores } from '../config/site';
+import Icon from './Icon.astro';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container cols">
+    <div>
+      <div class="name">{site.name}</div>
+      <p class="muted small">{site.tagline}</p>
+      <div class="socials">
+        {socials.map((s) => (
+          <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} title={s.label}><Icon name={s.icon} size={22} /></a>
+        ))}
+      </div>
+    </div>
+    <div>
+      <div class="head">Explore</div>
+      <a href="/experimental/">Experimental server</a>
+      <a href="/worlds/">World downloads</a>
+      <a href="/news/">News</a>
+    </div>
+    <div>
+      <div class="head">Shop</div>
+      {stores.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}
+    </div>
+  </div>
+  <div class="container legal small muted">
+    © {year} {site.name}. Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--border); background: var(--surface); margin-top: 4rem; padding-top: 2.5rem; }
+  .cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
+  .cols > div { display: flex; flex-direction: column; gap: .35rem; }
+  .cols a { color: var(--text-muted); text-decoration: none; }
+  .cols a:hover { color: var(--primary); }
+  .name { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }
+  .head { font-weight: 700; margin-bottom: .25rem; }
+  .socials { display: flex; gap: .75rem; margin-top: .5rem; }
+  .small { font-size: .88rem; }
+  .legal { padding: 1.5rem 0; margin-top: 2rem; border-top: 1px solid var(--border); }
+  @media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
+</style>

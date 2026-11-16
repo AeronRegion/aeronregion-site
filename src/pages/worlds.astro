@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import WorldCard from '../components/WorldCard.astro';
+import { worlds } from '../config/worlds';
+---
+<Base title="World Downloads" description="Download archived Aeron Region worlds.">
+  <section class="page-head">
+    <div class="container">
+      <div class="eyebrow">Archive</div>
+      <h1>World Downloads</h1>
+      <p class="muted">Every world we've run, free to download. Install the listed modpack version first, then drop the world folder into your <code>saves</code> folder.</p>
+    </div>
+  </section>
+  <section class="container section">
+    <div class="grid">{worlds.map((w) => <WorldCard world={w} />)}</div>
+  </section>
+</Base>

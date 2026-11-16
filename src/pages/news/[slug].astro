@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import { posts, fmtDate } from '../../lib/news';
+
+export function getStaticPaths() {
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = post;
+---
+<Base title={post.title} description={post.summary}>
+  <article class="container section">
+    <a href="/news/">← All news</a>
+    <header>
+      {post.tag && <span class="tag tag-accent">{post.tag}</span>}
+      <h1>{post.title}</h1>
+      <time class="muted">{fmtDate(post.date)}</time>
+    </header>
+    {post.image && <img class="cover" src={post.image} alt="" />}
+    <div class="prose"><Content /></div>
+  </article>
+</Base>
+
+<style>
+  header { margin: 1.5rem 0 2rem; }
+  h1 { margin: .5rem 0 .3rem; }
+  .cover { border-radius: var(--radius); margin-bottom: 2rem; aspect-ratio: 21/9; object-fit: cover; width: 100%; }
+</style>

@@ -1,0 +1,65 @@
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: dark; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main { flex: 1; }
+img { max-width: 100%; display: block; }
+a { color: var(--primary); }
+a:hover { color: var(--accent); }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+
+.container { width: min(100% - 2rem, var(--max-w)); margin-inline: auto; }
+.section { padding: 4rem 0; }
+.muted { color: var(--text-muted); }
+.eyebrow {
+  text-transform: uppercase; letter-spacing: .12em; font-size: .78rem;
+  color: var(--accent); font-weight: 700; margin-bottom: .5rem;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .7rem 1.2rem; border-radius: var(--radius-sm);
+  font-weight: 700; text-decoration: none; border: 2px solid transparent;
+  cursor: pointer; font-size: 1rem; font-family: inherit;
+  transition: transform .12s, background .12s, color .12s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--primary); color: var(--primary-ink); }
+.btn-primary:hover { background: #ffc4d9; color: var(--primary-ink); }
+.btn-ghost { border-color: var(--border); color: var(--text); background: rgb(0 0 0 / .25); }
+.btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+.btn[aria-disabled='true'] { opacity: .5; pointer-events: none; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+
+.tag {
+  display: inline-block; font-size: .75rem; font-weight: 700;
+  padding: .15rem .55rem; border-radius: 999px;
+  background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border);
+}
+.tag-accent { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+
+.page-head { padding: 3.5rem 0 1rem; border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%); }
+
+.prose { max-width: 70ch; }
+.prose img { border-radius: var(--radius); margin: 1.5rem 0; }
+.prose h2 { margin-top: 2rem; }

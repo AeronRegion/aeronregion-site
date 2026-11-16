@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import ServerStatus from '../components/ServerStatus.astro';
+import Icon from '../components/Icon.astro';
+import { experimental, stores } from '../config/site';
+const c = experimental.current;
+---
+<Base title="Experimental Server" description={`Now playing ${c.name}. A new modpack roughly every month, chosen by community poll.`}>
+  <section class="page-head">
+    <div class="container">
+      <div class="eyebrow">Server 2</div>
+      <h1>Experimental</h1>
+      <p class="muted">Our second server runs a different modpack roughly every month, picked by community poll. Ranks and purchases carry over when the pack changes.</p>
+    </div>
+  </section>
+
+  <section class="container section now">
+    <div class="card current">
+      <div class="eyebrow">Now playing · since {c.since}</div>
+      <h2>{c.name}</h2>
+      <div class="tags">
+        <span class="tag">v{c.version}</span>
+        <span class="tag">{c.loader}</span>
+      </div>
+      <ServerStatus ip={experimental.ip} />
+      <div class="actions">
+        {c.modrinth && <a class="btn btn-ghost" href={c.modrinth} target="_blank" rel="noopener">Modrinth</a>}
+        {c.curseforge && <a class="btn btn-ghost" href={c.curseforge} target="_blank" rel="noopener">CurseForge</a>}
+        <a class="btn btn-ghost" href={stores[1].href} target="_blank" rel="noopener"><Icon name="cart" size={18} /> Experimental Store</a>
+      </div>
+    </div>
+
+    <div class="card poll">
+      <div class="eyebrow">Next pack</div>
+      <h3>Vote on what's next</h3>
+      <p class="muted">Pack polls run in our Discord near the end of each cycle. Suggest a pack or cast your vote there.</p>
+      <a class="btn btn-primary" href={experimental.pollLink} target="_blank" rel="noopener"><Icon name="discord" size={18} /> Vote in Discord</a>
+    </div>
+  </section>
+
+  <section class="container">
+    <h2>Past packs</h2>
+    {experimental.history.length === 0
+      ? <p class="muted">This is the first pack. Past packs and their world downloads will show up here.</p>
+      : (
+        <table>
+          <thead><tr><th>Pack</th><th>Version</th><th>Ran</th></tr></thead>
+          <tbody>
+            {experimental.history.map((h: any) => <tr><td>{h.name}</td><td>{h.version}</td><td>{h.from} – {h.to}</td></tr>)}
+          </tbody>
+        </table>
+      )}
+    <p><a href="/worlds/">Download past worlds →</a></p>
+  </section>
+</Base>
+
+<style>
+  .now { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .current, .poll { padding: 1.75rem; display: flex; flex-direction: column; gap: .9rem; align-items: flex-start; }
+  .current { background: linear-gradient(135deg, var(--surface-2), var(--surface)); }
+  .current h2 { margin: 0; }
+  .poll h3, .poll p { margin: 0; }
+  .tags, .actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+  th, td { text-align: left; padding: .6rem .8rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-faint); font-weight: 600; }
+  @media (max-width: 820px) { .now { grid-template-columns: 1fr; } }
+</style>

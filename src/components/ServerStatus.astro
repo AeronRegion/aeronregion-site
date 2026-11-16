@@ -1,0 +1,66 @@
+---
+// Live status pill + copy-IP button. Uses the free mcsrvstat.us API (client-side).
+import Icon from './Icon.astro';
+const { ip, label = 'Server IP' } = Astro.props;
+---
+{ip ? (
+  <div class="status" data-ip={ip}>
+    <span class="dot" />
+    <span class="state">Checking…</span>
+    <button class="ip" type="button" title="Click to copy">
+      <span class="ip-label">{label}</span>
+      <code>{ip}</code>
+      <Icon name="copy" size={16} />
+    </button>
+  </div>
+) : (
+  <div class="status"><span class="state">IP posted in our Discord</span></div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('.status[data-ip]').forEach(async (el) => {
+    const ip = el.dataset.ip!;
+    const state = el.querySelector('.state')!;
+    const btn = el.querySelector('.ip')!;
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(ip);
+      const code = btn.querySelector('code')!;
+      code.textContent = 'Copied!';
+      setTimeout(() => (code.textContent = ip), 1400);
+    });
+    try {
+      const r = await fetch(`https://api.mcsrvstat.us/3/${ip}`);
+      const d = await r.json();
+      if (d.online) {
+        el.classList.add('online');
+        state.textContent = `${d.players?.online ?? 0} / ${d.players?.max ?? '?'} online`;
+      } else {
+        el.classList.add('offline');
+        state.textContent = 'Offline';
+      }
+    } catch {
+      state.textContent = 'Status unavailable';
+    }
+  });
+</script>
+
+<style>
+  .status {
+    display: inline-flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+    background: rgb(0 0 0 / .45); border: 1px solid var(--border);
+    padding: .4rem .4rem .4rem .9rem; border-radius: 999px; backdrop-filter: blur(6px);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-faint); }
+  .online .dot { background: var(--online); box-shadow: 0 0 10px var(--online); }
+  .offline .dot { background: var(--offline); }
+  .state { font-weight: 600; font-size: .92rem; }
+  .ip {
+    display: inline-flex; align-items: center; gap: .5rem; cursor: pointer;
+    background: var(--surface); color: var(--text); border: 1px solid var(--border);
+    border-radius: 999px; padding: .35rem .8rem; font: inherit;
+  }
+  .ip:hover { border-color: var(--primary); color: var(--primary); }
+  .ip-label { font-size: .75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+  .ip code { font-family: var(--font-mono); font-weight: 700; }
+  @media (max-width: 520px) { .status { border-radius: 16px; } }
+</style>
