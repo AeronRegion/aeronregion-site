@@ -13,6 +13,9 @@ const since = new Date(c.since + '-01T00:00:00Z').toLocaleDateString('en-US', { 
       <h1>{c.name}</h1>
       <p class="meta">Version {c.version}, {c.loader}</p>
       <ServerStatus ip={experimental.ip} />
+      {experimental.requestOnly && (
+        <p class="gate">This server is whitelisted. <a href={experimental.pollLink} target="_blank" rel="noopener">Ask for access in our Discord</a> before joining.</p>
+      )}
       <div class="actions">
         {c.modrinth && <a class="block stone" href={c.modrinth} target="_blank" rel="noopener">Get it on Modrinth</a>}
         {c.curseforge && <a class="block stone" href={c.curseforge} target="_blank" rel="noopener">Get it on CurseForge</a>}
@@ -24,7 +27,8 @@ const since = new Date(c.since + '-01T00:00:00Z').toLocaleDateString('en-US', { 
   <section class="wrap cols">
     <div>
       <h2>How it works</h2>
-      <p>Our second server runs a different modpack every month or so. Near the end of each pack, we post a poll in Discord and the community picks the next one.</p>
+      <p>Our second server runs a different modpack every month or so. Joining is by request: ask in Discord and we'll add you to the whitelist.</p>
+      <p>Near the end of each pack, we post a poll in Discord and the community picks the next one.</p>
       <p>Ranks and purchases from the experimental store carry over when the pack changes. When a pack ends, its world goes into the <a href="/worlds/">world archive</a>.</p>
       <a class="block" href={experimental.pollLink} target="_blank" rel="noopener"><Icon name="discord" size={18} /> Vote in Discord</a>
     </div>
@@ -48,6 +52,7 @@ const since = new Date(c.since + '-01T00:00:00Z').toLocaleDateString('en-US', { 
   .label { font-family: var(--font-pixel); color: var(--on-brick-soft); font-size: 1.15rem; margin-bottom: .4rem; }
   .now h1 { margin-bottom: .3rem; }
   .meta { color: var(--on-brick-soft); margin-bottom: 1.5rem; }
+  .gate { margin: 1rem 0 0; color: var(--on-brick); }
   .actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.5rem; }
   .cols { display: grid; grid-template-columns: 3fr 2fr; gap: 3.5rem; margin-top: 3.5rem; }
   .cols p { max-width: 60ch; }

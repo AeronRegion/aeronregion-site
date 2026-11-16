@@ -26,7 +26,7 @@ export const stores = [
 // Main server (home page)
 export const mainServer = {
   name: 'Cobbleverse',
-  ip: 'HMAC.mc.gg',
+  ip: 'hmac.minecraft.best',
   pack: 'Cobbleverse',
   packVersion: '1.7.42',
   trailer: 'https://www.youtube.com/embed/2RsB5djp1go',
@@ -36,7 +36,9 @@ export const mainServer = {
 // When the pack changes: update `current`, and move the old one into `history`.
 export const experimental = {
   name: 'Experimental',
-  ip: '', // ← fill in when ready; leave '' to show "IP in Discord"
+  ip: 'ar-2.minecraft.best',
+  // Whitelisted server. Set to false if it ever opens to everyone.
+  requestOnly: true,
   current: {
     name: 'Prominence™ II: Hasturian Era',
     version: '4.1.6',
