@@ -1,0 +1,49 @@
+---
+// One entry in the world-select style list.
+import Icon from './Icon.astro';
+import { downloadsBase } from '../config/site';
+import type { World } from '../config/worlds';
+const { world } = Astro.props as { world: World };
+const href = `${downloadsBase}/${world.file}`;
+---
+<li class="row">
+  <div class="icon">
+    {world.image ? <img src={world.image} alt="" loading="lazy" /> : <span>{world.label.charAt(0)}</span>}
+  </div>
+  <div class="info">
+    <h3>{world.label}</h3>
+    <p class="line">{world.server}, {world.period}</p>
+    <p class="line">
+      {world.packLink ? <a href={world.packLink} target="_blank" rel="noopener">{world.pack}</a> : world.pack}
+      <span class="sep">/</span>{world.mc}{world.size && <><span class="sep">/</span>{world.size}</>}
+    </p>
+    {world.description && <p class="desc">{world.description}</p>}
+  </div>
+  <div class="act">
+    {world.available
+      ? <a class="block" href={href} download><Icon name="download" size={18} /> Download</a>
+      : <span class="block" aria-disabled="true">Not uploaded yet</span>}
+  </div>
+</li>
+
+<style>
+  .row {
+    display: grid; grid-template-columns: 112px 1fr auto; gap: 1.25rem; align-items: center;
+    padding: .9rem; border: 2px solid transparent;
+  }
+  .row:hover { border-color: #fff; background: rgb(0 0 0 / .25); }
+  .icon { width: 112px; aspect-ratio: 1; border: 2px solid #000; background: var(--brick-deep); overflow: hidden; }
+  .icon img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 70%; image-rendering: auto; }
+  .icon span { display: grid; place-items: center; height: 100%; font-family: var(--font-pixel); font-size: 3rem; color: var(--blossom); }
+  h3 { margin: 0 0 .15rem; color: #fff; }
+  .line { margin: 0; color: #a8a8a8; font-family: var(--font-pixel); font-size: 1rem; }
+  .line a { color: #a8a8a8; }
+  .line a:hover { color: #fff; }
+  .sep { margin: 0 .5rem; opacity: .6; }
+  .desc { margin: .5rem 0 0; color: #d6d0ce; font-size: .97rem; max-width: 60ch; }
+  @media (max-width: 640px) {
+    .row { grid-template-columns: 72px 1fr; }
+    .icon { width: 72px; }
+    .act { grid-column: 1 / -1; }
+  }
+</style>

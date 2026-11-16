@@ -1,20 +1,20 @@
 ---
-// Live status pill + copy-IP button. Uses the free mcsrvstat.us API (client-side).
+// Live player count + click-to-copy IP, styled as a nametag plate.
+// Uses the free mcsrvstat.us API in the visitor's browser.
 import Icon from './Icon.astro';
-const { ip, label = 'Server IP' } = Astro.props;
+const { ip } = Astro.props;
 ---
 {ip ? (
-  <div class="status" data-ip={ip}>
-    <span class="dot" />
-    <span class="state">Checking…</span>
-    <button class="ip" type="button" title="Click to copy">
-      <span class="ip-label">{label}</span>
-      <code>{ip}</code>
+  <div class="status pixel-corners" data-ip={ip}>
+    <span class="dot" aria-hidden="true"></span>
+    <span class="state">Checking server</span>
+    <button class="ip" type="button" aria-label={`Copy server address ${ip}`}>
+      <span class="addr">{ip}</span>
       <Icon name="copy" size={16} />
     </button>
   </div>
 ) : (
-  <div class="status"><span class="state">IP posted in our Discord</span></div>
+  <div class="status pixel-corners"><span class="state">Server address is in our Discord</span></div>
 )}
 
 <script>
@@ -22,21 +22,21 @@ const { ip, label = 'Server IP' } = Astro.props;
     const ip = el.dataset.ip!;
     const state = el.querySelector('.state')!;
     const btn = el.querySelector('.ip')!;
+    const addr = btn.querySelector('.addr')!;
     btn.addEventListener('click', async () => {
       await navigator.clipboard.writeText(ip);
-      const code = btn.querySelector('code')!;
-      code.textContent = 'Copied!';
-      setTimeout(() => (code.textContent = ip), 1400);
+      addr.textContent = 'Copied';
+      setTimeout(() => (addr.textContent = ip), 1400);
     });
     try {
-      const r = await fetch(`https://api.mcsrvstat.us/3/${ip}`);
-      const d = await r.json();
+      const d = await (await fetch(`https://api.mcsrvstat.us/3/${ip}`)).json();
       if (d.online) {
         el.classList.add('online');
-        state.textContent = `${d.players?.online ?? 0} / ${d.players?.max ?? '?'} online`;
+        const n = d.players?.online ?? 0;
+        state.textContent = `${n} ${n === 1 ? 'player' : 'players'} online`;
       } else {
         el.classList.add('offline');
-        state.textContent = 'Offline';
+        state.textContent = 'Server offline';
       }
     } catch {
       state.textContent = 'Status unavailable';
@@ -46,21 +46,19 @@ const { ip, label = 'Server IP' } = Astro.props;
 
 <style>
   .status {
-    display: inline-flex; align-items: center; gap: .6rem; flex-wrap: wrap;
-    background: rgb(0 0 0 / .45); border: 1px solid var(--border);
-    padding: .4rem .4rem .4rem .9rem; border-radius: 999px; backdrop-filter: blur(6px);
+    display: inline-flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+    background: var(--tag-bg); color: var(--tag-fg);
+    font-family: var(--font-pixel); font-size: 1.1rem;
+    padding: .45rem .5rem .45rem .9rem;
   }
-  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-faint); }
-  .online .dot { background: var(--online); box-shadow: 0 0 10px var(--online); }
-  .offline .dot { background: var(--offline); }
-  .state { font-weight: 600; font-size: .92rem; }
+  .dot { width: 10px; height: 10px; background: #9a9a9a; }
+  .online .dot { background: var(--teal); box-shadow: 0 0 0 3px rgb(86 198 187 / .3); }
+  .offline .dot { background: #e2687a; }
   .ip {
     display: inline-flex; align-items: center; gap: .5rem; cursor: pointer;
-    background: var(--surface); color: var(--text); border: 1px solid var(--border);
-    border-radius: 999px; padding: .35rem .8rem; font: inherit;
+    font: inherit; color: var(--ink); background: #e8e2df;
+    border: 2px solid #000; padding: .2rem .65rem;
+    box-shadow: inset 2px 2px 0 #fff, inset -2px -2px 0 #9d9190;
   }
-  .ip:hover { border-color: var(--primary); color: var(--primary); }
-  .ip-label { font-size: .75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
-  .ip code { font-family: var(--font-mono); font-weight: 700; }
-  @media (max-width: 520px) { .status { border-radius: 16px; } }
+  .ip:hover { background: #fff; }
 </style>

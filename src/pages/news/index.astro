@@ -1,17 +1,17 @@
 ---
 import Base from '../../layouts/Base.astro';
-import NewsCard from '../../components/NewsCard.astro';
+import NewsList from '../../components/NewsList.astro';
 import { posts } from '../../lib/news';
 ---
 <Base title="News" description="News and updates from Aeron Region.">
-  <section class="page-head">
-    <div class="container">
-      <div class="eyebrow">Updates</div>
-      <h1>News</h1>
-      <p class="muted">Server updates, events, tournaments, and pack changes.</p>
-    </div>
-  </section>
-  <section class="container section">
-    <div class="grid">{posts.map((p) => <NewsCard post={p} />)}</div>
+  <section class="wrap page">
+    <h1>News</h1>
+    <p class="soft">Server updates, events, tournaments, and pack changes.</p>
+    <NewsList posts={posts} />
   </section>
 </Base>
+
+<style>
+  .page { padding-top: 3.5rem; max-width: 820px; }
+  .soft { margin-bottom: 2rem; }
+</style>

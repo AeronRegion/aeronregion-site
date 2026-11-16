@@ -1,65 +1,67 @@
 ---
 import Base from '../layouts/Base.astro';
 import ServerStatus from '../components/ServerStatus.astro';
-import NewsCard from '../components/NewsCard.astro';
+import NewsList from '../components/NewsList.astro';
 import Icon from '../components/Icon.astro';
 import { site, mainServer, socials, stores, experimental } from '../config/site';
 import { posts } from '../lib/news';
-const latest = posts.slice(0, 3);
+const latest = posts.slice(0, 4);
 const discord = socials.find((s) => s.icon === 'discord')!;
+const challonge = socials.find((s) => s.icon === 'trophy')!;
 ---
 <Base>
-  <!-- HERO — community screenshot. Characters sit in the lower half, so the image is anchored low. -->
+  <!-- HERO: the community screenshot, with the name floating above the crowd like a nametag. -->
   <section class="hero">
-    <img class="hero-img" src="/images/hero.webp" alt="Aeron Region players gathered in the cherry-blossom town" fetchpriority="high" />
-    <div class="hero-shade"></div>
-    <div class="container hero-content">
-      <div class="eyebrow">Cobblemon · {mainServer.pack} {mainServer.packVersion}</div>
-      <h1>{site.name}</h1>
-      <p class="lead">{site.tagline}</p>
-      <ServerStatus ip={mainServer.ip} />
-      <div class="actions">
-        <a class="btn btn-primary" href={discord.href} target="_blank" rel="noopener"><Icon name="discord" /> Join the Discord</a>
-        <a class="btn btn-ghost" href={stores[0].href} target="_blank" rel="noopener"><Icon name="cart" /> Store</a>
+    <img class="shot" src="/images/hero.webp" alt="Aeron Region players gathered in the cherry-blossom town" fetchpriority="high" />
+    <div class="dock">
+      <div class="wrap">
+        <h1 class="title"><span class="nametag">{site.name}</span></h1>
+        <p class="sub">Cobblemon on {mainServer.pack} {mainServer.packVersion}</p>
+      </div>
+      <div class="wrap dock-inner">
+        <ServerStatus ip={mainServer.ip} />
+        <div class="actions">
+          <a class="block" href={discord.href} target="_blank" rel="noopener"><Icon name="discord" size={18} /> Join the Discord</a>
+          <a class="block stone" href={stores[0].href} target="_blank" rel="noopener"><Icon name="cart" size={18} /> Store</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- QUICK LINKS -->
-  <section class="container quick">
-    <a href="/worlds/" class="card q">
-      <div class="eyebrow">Archive</div>
-      <h3>World downloads</h3>
-      <p class="muted">Grab past worlds from every season and pack we've run.</p>
-    </a>
-    <a href="/experimental/" class="card q">
-      <div class="eyebrow">Server 2</div>
-      <h3>Experimental</h3>
-      <p class="muted">Now playing: {experimental.current.name}. New pack roughly every month, by vote.</p>
-    </a>
-    <a href={socials.find((s) => s.icon === 'trophy')!.href} target="_blank" rel="noopener" class="card q">
-      <div class="eyebrow">Compete</div>
-      <h3>Gym league & tournaments</h3>
-      <p class="muted">Brackets and results on our Challonge community.</p>
-    </a>
+  <section class="wrap split">
+    <div class="intro">
+      <p class="lede">{site.tagline} Run your own gym, challenge the league, or just build something nice under the blossoms.</p>
+      <p><a href={challonge.href} target="_blank" rel="noopener">Tournament brackets on Challonge</a></p>
+
+      {latest.length > 0 && (
+        <>
+          <h2>News</h2>
+          <NewsList posts={latest} />
+          <p><a href="/news/">All news</a></p>
+        </>
+      )}
+    </div>
+
+    <aside class="side">
+      <div class="panel pixel-corners">
+        <h2>Experimental server</h2>
+        <p class="soft">A second server with a new modpack every month or so. The community votes on what's next.</p>
+        <p class="now">Now playing<br /><strong>{experimental.current.name}</strong></p>
+        <a class="block" href="/experimental/">See the current pack</a>
+      </div>
+
+      <div class="panel archive pixel-corners">
+        <h2>World archive</h2>
+        <p class="soft">Download our past worlds and explore them in singleplayer.</p>
+        <a class="block stone" href="/worlds/"><Icon name="download" size={18} /> Browse worlds</a>
+      </div>
+    </aside>
   </section>
 
-  <!-- NEWS -->
-  {latest.length > 0 && (
-    <section class="container section">
-      <div class="row">
-        <h2>Latest news</h2>
-        <a href="/news/">All news →</a>
-      </div>
-      <div class="grid">{latest.map((p) => <NewsCard post={p} />)}</div>
-    </section>
-  )}
-
-  <!-- TRAILER -->
   {mainServer.trailer && (
-    <section class="container section">
-      <h2>Official trailer</h2>
-      <div class="video card">
+    <section class="wrap trailer">
+      <h2>Trailer</h2>
+      <div class="frame">
         <iframe src={mainServer.trailer} title="Aeron Region trailer" loading="lazy"
           allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
@@ -68,31 +70,35 @@ const discord = socials.find((s) => s.icon === 'discord')!;
 </Base>
 
 <style>
-  .hero { position: relative; min-height: min(88vh, 760px); display: flex; align-items: flex-end; overflow: hidden; }
-  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 62%; }
-  .hero-shade {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(90deg, rgb(23 13 17 / .85) 0%, rgb(23 13 17 / .35) 45%, transparent 75%),
-      linear-gradient(0deg, var(--bg) 0%, rgb(23 13 17 / .2) 35%, transparent 60%);
-  }
-  .hero-content { position: relative; padding: 6rem 0 4rem; max-width: var(--max-w); }
-  .hero h1 { text-shadow: 0 4px 24px rgb(0 0 0 / .6); color: #fff; margin-bottom: .2em; }
-  .lead { font-size: 1.2rem; max-width: 34ch; margin: 0 0 1.5rem; text-shadow: 0 2px 12px rgb(0 0 0 / .7); }
-  .actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.25rem; }
+  .hero { position: relative; height: min(86vh, 780px); min-height: 520px; overflow: hidden; background: var(--brick-deep); }
+  .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 65%; }
+  .dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 6rem 0 1.5rem;
+    background: linear-gradient(0deg, rgb(53 24 32 / .96) 0%, rgb(53 24 32 / .8) 45%, transparent 100%); }
+  .title { margin: 0 0 0 -.3em; font-size: clamp(2.6rem, 7vw, 5.2rem); font-weight: 700; }
+  .title .nametag { padding: .02em .3em .08em; }
+  .sub { margin: .5rem 0 1.25rem; font-family: var(--font-pixel); font-size: 1.2rem; color: var(--on-brick-soft); }
+  .dock-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
 
-  .quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: -1.5rem; position: relative; }
-  .q { padding: 1.4rem; text-decoration: none; color: var(--text); transition: border-color .15s, transform .15s; }
-  .q:hover { border-color: var(--primary); transform: translateY(-2px); color: var(--text); }
-  .q h3 { margin-bottom: .3rem; }
-  .q p { margin: 0; font-size: .95rem; }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 3.5rem; margin-top: 3.5rem; }
+  .lede { font-size: 1.3rem; line-height: 1.5; max-width: 34ch; }
+  .intro h2 { margin-top: 2.5rem; }
 
-  .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem; }
-  .video { aspect-ratio: 16/9; }
-  .video iframe { width: 100%; height: 100%; border: 0; }
+  .side { display: flex; flex-direction: column; gap: 1.5rem; }
+  .panel { background: var(--brick); color: var(--on-brick); padding: 1.5rem; }
+  .panel h2 { font-size: 1.5rem; margin-bottom: .4rem; }
+  .panel .soft { color: var(--on-brick-soft); }
+  .now { font-family: var(--font-pixel); color: var(--on-brick-soft); }
+  .now strong { color: #fff; font-size: 1.2rem; font-weight: 600; }
+  .archive { background: var(--brick-deep); }
 
-  @media (max-width: 820px) {
-    .quick { grid-template-columns: 1fr; margin-top: 1rem; }
-    .hero-img { object-position: 40% 62%; }
+  .trailer { margin-top: 4.5rem; }
+  .frame { aspect-ratio: 16/9; border: 4px solid var(--ink); background: #000; }
+  .frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  @media (max-width: 880px) {
+    .split { grid-template-columns: 1fr; gap: 2.5rem; }
+    .shot { object-position: 45% 65%; }
+    .title { margin-left: 0; }
   }
 </style>

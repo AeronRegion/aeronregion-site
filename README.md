@@ -27,11 +27,15 @@ Put images in `public/images/` and reference them as `/images/...`.
 
 ## For the designer
 
-- **Colors, fonts, radius, spacing:** `src/styles/tokens.css`. Change values there and the whole site follows.
-- **Logo:** `src/components/Header.astro`, replace the `.brand-mark` span with an `<img>`. Favicon is `public/favicon.svg`.
-- **Hero image:** `public/images/hero.webp`. Characters sit low in the frame, so the crop is anchored with `object-position: center 62%` in `src/pages/index.astro`.
+The look borrows from Minecraft's own UI: nametag plates (the title in the hero), bevelled block buttons, and the singleplayer world-select list on the Worlds page.
+
+- **Colors, fonts, the "pixel" size:** `src/styles/tokens.css`. Change values there and the whole site follows.
+- **Fonts:** Pixelify Sans (headings, buttons, labels) and Nunito (body), both bundled from npm (`@fontsource-variable/*`). To swap one, install the new package, import it in `src/styles/global.css`, and update `--font-pixel` / `--font-body`.
+- **Shared pieces** (`.block` buttons, `.nametag`, `.pixel-corners`, `.band`) are in `src/styles/global.css`. Each component keeps its own styles at the bottom of its file.
+- **Logo:** `src/components/Header.astro`. Swap the brand text for an `<img>`. Favicon is `public/favicon.svg`.
+- **Hero image:** `public/images/hero.webp`, cropped with `object-position: center 65%` in `src/pages/index.astro`.
+- **World icons:** set `image` on a world in `src/config/worlds.ts` (square crops look best).
 - **Social preview image:** `public/images/og.jpg` (1200×630 ideal).
-- Shared styles (buttons, cards, tags) are in `src/styles/global.css`. Each component keeps its own styles at the bottom of its file.
 
 ## Run locally
 

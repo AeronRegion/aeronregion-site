@@ -1,0 +1,35 @@
+---
+import { type Post } from '../lib/news';
+const { posts } = Astro.props as { posts: Post[] };
+const short = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const year = (d: Date) => d.getUTCFullYear();
+---
+<ol class="news">
+  {posts.map((p) => (
+    <li>
+      <time datetime={p.date.toISOString()}>
+        <span class="d">{short(p.date)}</span>
+        <span class="y">{year(p.date)}</span>
+      </time>
+      <div>
+        <h3><a href={`/news/${p.slug}/`}>{p.title}</a></h3>
+        {p.summary && <p class="soft">{p.summary}</p>}
+        {p.tag && <span class="tag">{p.tag}</span>}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .news { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1.25rem; padding: 1.25rem 0; border-top: 2px solid var(--ink); }
+  li:last-child { border-bottom: 2px solid var(--ink); }
+  time { font-family: var(--font-pixel); line-height: 1.1; }
+  .d { display: block; font-size: 1.25rem; }
+  .y { color: var(--ink-soft); }
+  h3 { margin: 0 0 .3rem; }
+  h3 a { text-decoration: none; color: var(--ink); }
+  h3 a:hover { text-decoration: underline; }
+  p { margin: 0 0 .5rem; max-width: 60ch; }
+  .tag { font-family: var(--font-pixel); font-size: .9rem; color: var(--teal-ink); }
+</style>
