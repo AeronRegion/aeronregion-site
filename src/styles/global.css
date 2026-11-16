@@ -7,6 +7,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 body {
+  overflow-x: clip;
   margin: 0;
   background: var(--petal);
   color: var(--ink);
@@ -74,5 +75,10 @@ p { margin: 0 0 1em; }
 .prose { max-width: 66ch; }
 .prose img { margin: 1.5rem 0; border: 2px solid var(--ink); }
 .prose h2 { margin-top: 2rem; }
+
+/* Scroll reveal: blocks slide in, alternating left and right (set up in Base.astro) */
+.reveal { opacity: 0; transform: translateX(-48px); }
+.reveal.from-right { transform: translateX(48px); }
+.reveal.in { opacity: 1; transform: none; transition: opacity .32s ease-out, transform .32s cubic-bezier(.2, .8, .2, 1); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

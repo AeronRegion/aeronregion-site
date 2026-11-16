@@ -27,5 +27,26 @@ const og = new URL('/images/og.jpg', site.url).href;
     <Header />
     <main><slot /></main>
     <Footer />
+    <script>
+      // Blocks that slide in on scroll, alternating left/right. Add a selector here to animate more things.
+      const targets = [
+        '.split > .intro > *', '.side > *', '.trailer',
+        '.head > *', '.show', '.results > *', '.history > ul > li',
+        '.list > li', '.now .wrap > *', '.cols > *', '.page > *', '.post > *',
+      ].join(',');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        const els = [...document.querySelectorAll<HTMLElement>(targets)];
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        els.forEach((el, i) => {
+          el.classList.add('reveal');
+          if (i % 2) el.classList.add('from-right');
+          io.observe(el);
+        });
+      }
+    </script>
   </body>
 </html>
