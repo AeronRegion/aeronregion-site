@@ -19,7 +19,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
         <p class="sub"><span class="nametag">{site.tagline}</span></p>
       </div>
       <div class="wrap dock-inner">
-        <ServerStatus ip={mainServer.ip} />
+        <ServerStatus ip={mainServer.ip} statusHost={mainServer.statusHost} />
         <div class="actions">
           <a class="block" href={discord.href} target="_blank" rel="noopener"><Icon name="discord" size={18} /> Join the Discord</a>
           <a class="block stone" href={stores[0].href} target="_blank" rel="noopener"><Icon name="cart" size={18} /> Store</a>
@@ -30,7 +30,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
 
   <section class="wrap split">
     <div class="intro">
-      <p class="lede">Cobblemon on {mainServer.pack}, with a gym league, tournaments, and a second server that tries a new modpack every month. Run your own gym, challenge the league, or just build something nice under the blossoms.</p>
+      <p class="lede">{mainServer.pack} {mainServer.packVersion}, with a gym league, tournaments, and a second modded server that tries a new modpack every month. Apply for your own gym, challenge the league, or just build something nice with a community.</p>
       <p><a href={challonge.href} target="_blank" rel="noopener">Tournament brackets on Challonge</a></p>
 
       {latest.length > 0 && (
@@ -59,7 +59,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
         <div class="pack">
           <p class="now">Experimental server<br /><strong>{experimental.current.name} {experimental.current.version}</strong></p>
           <code class="addr">{experimental.ip}</code>
-          {experimental.requestOnly && <p class="soft small">Whitelisted. Ask for access in Discord.</p>}
+          {experimental.requestAccess && <p class="soft small"><a href={experimental.accessLink} target="_blank" rel="noopener">Request access</a> in our Discord to join.</p>}
           <div class="dl">
             {experimental.current.modrinth && <a class="block" href={experimental.current.modrinth} target="_blank" rel="noopener"><Icon name="download" size={18} /> Modrinth</a>}
             {experimental.current.curseforge && <a class="block stone" href={experimental.current.curseforge} target="_blank" rel="noopener">CurseForge</a>}
@@ -78,7 +78,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
 
   {mainServer.trailer && (
     <section class="wrap trailer">
-      <h2>Trailer</h2>
+      <h2>Official Trailer</h2>
       <div class="frame">
         <iframe src={mainServer.trailer} title="Aeron Region trailer" loading="lazy"
           allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -96,7 +96,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
   .title .nametag, .sub .nametag { background: rgb(0 0 0 / .55); text-shadow: 3px 3px 0 rgb(0 0 0 / .5); }
   .title .nametag { padding: .02em .3em .08em; }
   .sub { margin: .6rem 0 1.4rem -.45em; font-size: clamp(1.3rem, 2.6vw, 1.9rem); }
-  .sub .nametag { padding: .1em .45em .15em; }
+  .sub .nametag { padding: .1em .45em .15em; font-family: var(--font-ui); font-weight: 700; }
   .dock-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
   .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
 
@@ -108,12 +108,13 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
   .panel { background: var(--brick); color: var(--on-brick); padding: 1.5rem; }
   .panel h2 { font-size: 1.5rem; margin-bottom: .4rem; }
   .panel .soft { color: var(--on-brick-soft); }
-  .now { font-family: var(--font-pixel); color: var(--on-brick-soft); }
+  .panel a:not(.block) { color: var(--blossom); }
+  .now { font-family: var(--font-ui); color: var(--on-brick-soft); }
   .now strong { color: #fff; font-size: 1.2rem; font-weight: 600; }
   .archive { background: var(--brick-deep); }
   .pack { border-top: 2px solid var(--brick-deep); padding-top: 1rem; margin-top: 1rem; }
   .pack .now { margin-bottom: .4rem; }
-  .addr { display: inline-block; font-family: var(--font-pixel); background: rgb(0 0 0 / .3); padding: .1rem .5rem; margin-bottom: .75rem; }
+  .addr { display: inline-block; font-family: var(--font-ui); background: rgb(0 0 0 / .3); padding: .1rem .5rem; margin-bottom: .75rem; }
   .dl { display: flex; gap: .5rem; flex-wrap: wrap; }
   .dl .block { font-size: 1rem; padding: .45rem .85rem; }
   .small { font-size: .92rem; margin: .6rem 0 0; }

@@ -1,5 +1,8 @@
 @import '@fontsource-variable/pixelify-sans';
 @import '@fontsource-variable/nunito';
+@import '@fontsource/chakra-petch/500.css';
+@import '@fontsource/chakra-petch/600.css';
+@import '@fontsource/chakra-petch/700.css';
 @import './tokens.css';
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -20,10 +23,10 @@ a { color: var(--brick); text-decoration-thickness: 2px; text-underline-offset: 
 a:hover { color: var(--ink); }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
-h1, h2, h3 { font-family: var(--font-pixel); font-weight: 600; line-height: 1.1; margin: 0 0 .6em; letter-spacing: .01em; }
+h1, h2 { font-family: var(--font-pixel); font-weight: 600; line-height: 1.1; margin: 0 0 .6em; letter-spacing: .01em; }
 h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); }
 h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
-h3 { font-size: 1.35rem; }
+h3 { font-family: var(--font-ui); font-weight: 700; font-size: 1.3rem; line-height: 1.25; margin: 0 0 .5em; }
 p { margin: 0 0 1em; }
 
 .wrap { width: min(100% - 2.5rem, var(--max-w)); margin-inline: auto; }
@@ -50,7 +53,7 @@ p { margin: 0 0 1em; }
 /* Block button — bevelled like the Minecraft menu */
 .block {
   display: inline-flex; align-items: center; gap: .55rem;
-  font-family: var(--font-pixel); font-size: 1.1rem; font-weight: 500;
+  font-family: var(--font-ui); font-size: 1.05rem; font-weight: 700;
   padding: .6rem 1.15rem;
   color: var(--ink); background: var(--blossom);
   border: 2px solid var(--ink);
@@ -64,7 +67,8 @@ p { margin: 0 0 1em; }
 .block[aria-disabled='true'] { background: #6f6361; color: #e2d8d6; pointer-events: none; box-shadow: none; }
 
 .band { background: var(--brick); color: var(--on-brick); }
-.band a { color: var(--on-brick); }
+.band a:not(.block) { color: var(--on-brick); }
+.band a.block, .panel a.block { color: var(--ink); }
 .band .soft { color: var(--on-brick-soft); }
 
 .prose { max-width: 66ch; }

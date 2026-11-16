@@ -1,26 +1,22 @@
 ---
-// Live player count + click-to-copy IP, styled as a nametag plate.
-// Uses the free mcsrvstat.us API in the visitor's browser.
+// Live player count + click-to-copy address, styled as a nametag plate.
+// `ip` is what players see; `statusHost` is what gets pinged (via api.mcstatus.io).
 import Icon from './Icon.astro';
-const { ip } = Astro.props;
+const { ip, statusHost = '' } = Astro.props;
 ---
-{ip ? (
-  <div class="status pixel-corners" data-ip={ip}>
-    <span class="dot" aria-hidden="true"></span>
-    <span class="state">Checking server</span>
-    <button class="ip" type="button" aria-label={`Copy server address ${ip}`}>
-      <span class="addr">{ip}</span>
-      <Icon name="copy" size={16} />
-    </button>
-  </div>
-) : (
-  <div class="status pixel-corners"><span class="state">Server address is in our Discord</span></div>
-)}
+<div class="status pixel-corners" data-ip={ip} data-host={statusHost}>
+  {statusHost && <span class="dot" aria-hidden="true"></span>}
+  {statusHost && <span class="state">Checking server</span>}
+  <button class="ip" type="button" aria-label={`Copy server address ${ip}`}>
+    <span class="addr">{ip}</span>
+    <Icon name="copy" size={16} />
+  </button>
+</div>
 
 <script>
   document.querySelectorAll<HTMLElement>('.status[data-ip]').forEach(async (el) => {
     const ip = el.dataset.ip!;
-    const state = el.querySelector('.state')!;
+    const host = el.dataset.host;
     const btn = el.querySelector('.ip')!;
     const addr = btn.querySelector('.addr')!;
     btn.addEventListener('click', async () => {
@@ -28,8 +24,10 @@ const { ip } = Astro.props;
       addr.textContent = 'Copied';
       setTimeout(() => (addr.textContent = ip), 1400);
     });
+    if (!host) return;
+    const state = el.querySelector('.state')!;
     try {
-      const d = await (await fetch(`https://api.mcsrvstat.us/3/${ip}`)).json();
+      const d = await (await fetch(`https://api.mcstatus.io/v2/status/java/${host}`)).json();
       if (d.online) {
         el.classList.add('online');
         const n = d.players?.online ?? 0;
@@ -47,8 +45,8 @@ const { ip } = Astro.props;
 <style>
   .status {
     display: inline-flex; align-items: center; gap: .75rem; flex-wrap: wrap;
-    background: var(--tag-bg); color: var(--tag-fg);
-    font-family: var(--font-pixel); font-size: 1.1rem;
+    background: rgb(0 0 0 / .55); color: #fff;
+    font-family: var(--font-ui); font-weight: 600; font-size: 1.05rem;
     padding: .45rem .5rem .45rem .9rem;
   }
   .dot { width: 10px; height: 10px; background: #9a9a9a; }

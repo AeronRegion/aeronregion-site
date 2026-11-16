@@ -19,19 +19,20 @@ export const socials = [
 ] as const;
 
 export const stores = [
-  { label: 'Cobbleverse Store', href: 'https://hmac.craftingstore.net/' },
+  { label: 'Aeron Region Store', href: 'https://hmac.craftingstore.net/' },
   { label: 'Experimental Store', href: 'https://ar-2.craftingstore.net/' },
 ];
 
 // Main server (home page)
 export const mainServer = {
-  name: 'Cobbleverse',
-  ip: 'hmac.minecraft.best',
+  name: 'Aeron Region',
+  ip: 'hmac.minecraft.best',      // address shown to players
+  statusHost: 'hmac.mc.gg',       // address the live player count checks (must resolve publicly)
   pack: 'Cobbleverse',
   packVersion: '1.7.42',
   loader: 'Fabric 1.21.1',
   modrinth: 'https://modrinth.com/modpack/cobbleverse',
-  curseforge: '', // add the CurseForge link here if you want it shown
+  curseforge: 'https://www.curseforge.com/minecraft/modpacks/cobbleverse-cobblemon',
   trailer: 'https://www.youtube.com/embed/2RsB5djp1go',
 };
 
@@ -40,14 +41,16 @@ export const mainServer = {
 export const experimental = {
   name: 'Experimental',
   ip: 'ar-2.minecraft.best',
-  // Whitelisted server. Set to false if it ever opens to everyone.
-  requestOnly: true,
+  statusHost: '',                 // add a publicly resolvable address/IP to show the player count
+  requestAccess: true,            // shows "Request access" wording; set false if it opens to everyone
+  accessLink: 'https://discord.gg/zC4YKx5sDx',
   current: {
     name: 'Prominence™ II: Hasturian Era',
     version: '4.1.6',
     loader: 'Fabric 1.20.1',
     modrinth: 'https://modrinth.com/modpack/prominence-2-fabric',
     curseforge: 'https://www.curseforge.com/minecraft/modpacks/prominence-2-hasturian-era',
+    banner: '/images/packs/prominence-banner.webp',
     since: '2026-11',
   },
   pollLink: 'https://discord.gg/zC4YKx5sDx',

@@ -8,7 +8,8 @@ const discord = socials.find((s) => s.icon === 'discord');
 <header class="site-header band">
   <div class="wrap bar">
     <a href="/" class="brand">
-      <!-- LOGO: swap this text for <img src="/images/logo.svg" alt="Aeron Region"> -->
+      <!-- LOGO: server icon + name. Swap the image in public/images/icon-96.png -->
+      <img src="/images/icon-96.png" alt="" width="40" height="40" class="icon" />
       {site.name}
     </a>
 
@@ -46,10 +47,10 @@ const discord = socials.find((s) => s.icon === 'discord');
 <style>
   .site-header { position: sticky; top: 0; z-index: 50; border-bottom: 4px solid var(--brick-deep); }
   .bar { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .brand { font-family: var(--font-pixel); font-size: 1.6rem; font-weight: 700; text-decoration: none; color: var(--on-brick); }
+  .brand { display: flex; align-items: center; gap: .55rem; font-family: var(--font-pixel); font-size: 1.6rem; font-weight: 700; text-decoration: none; color: var(--on-brick); }
   .nav { display: flex; align-items: center; gap: 1.4rem; }
   .link {
-    font-family: var(--font-pixel); font-size: 1.1rem; color: var(--on-brick-soft);
+    font-family: var(--font-ui); font-weight: 600; font-size: 1.08rem; color: var(--on-brick-soft);
     text-decoration: none; cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: .2rem;
     padding: .2rem 0; border-bottom: 3px solid transparent;
   }
@@ -64,6 +65,7 @@ const discord = socials.find((s) => s.icon === 'discord');
   .menu a { padding: .5rem .7rem; text-decoration: none; color: var(--on-brick); }
   .menu a:hover { background: var(--brick); outline: 2px solid #fff; outline-offset: -2px; }
   .block { font-size: 1rem; padding: .4rem .9rem; }
+  .icon { image-rendering: pixelated; }
   .menu-btn { display: none; background: none; border: 0; color: var(--on-brick); cursor: pointer; }
 
   @media (max-width: 820px) {

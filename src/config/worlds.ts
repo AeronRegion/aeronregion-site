@@ -27,7 +27,8 @@ export const worlds: World[] = [
     period: 'Ongoing',
     description: 'The Aeron Region home world: gyms, tournament arenas, and everything the community has built.',
     file: 'worlds/Cobbleverse.zip',
-    image: '/images/hero.webp',
+    image: '/images/worlds/cobbleverse.png',
+    packLink: 'https://modrinth.com/modpack/cobbleverse',
     available: false,
   },
   {
@@ -39,6 +40,7 @@ export const worlds: World[] = [
     description: 'The first pack on the experimental server.',
     file: 'worlds/Prominence-II.zip',
     packLink: 'https://www.curseforge.com/minecraft/modpacks/prominence-2-hasturian-era',
+    image: '/images/worlds/prominence.webp',
     available: false,
   },
 ];
