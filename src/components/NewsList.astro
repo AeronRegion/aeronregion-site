@@ -1,14 +1,13 @@
 ---
 import { type Post } from '../lib/news';
+import { dayMonth, year } from '../lib/dates';
 const { posts } = Astro.props as { posts: Post[] };
-const short = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
-const year = (d: Date) => d.getUTCFullYear();
 ---
 <ol class="news">
   {posts.map((p) => (
     <li>
       <time datetime={p.date.toISOString()}>
-        <span class="d">{short(p.date)}</span>
+        <span class="d">{dayMonth(p.date)}</span>
         <span class="y">{year(p.date)}</span>
       </time>
       <div>
@@ -25,7 +24,7 @@ const year = (d: Date) => d.getUTCFullYear();
   li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1.25rem; padding: 1.25rem 0; border-top: 2px solid var(--ink); }
   li:last-child { border-bottom: 2px solid var(--ink); }
   time { font-family: var(--font-ui); line-height: 1.1; }
-  .d { display: block; font-size: 1.25rem; }
+  .d { display: block; font-size: 1.25rem; font-weight: 700; }
   .y { color: var(--ink-soft); }
   h3 { margin: 0 0 .3rem; }
   h3 a { text-decoration: none; color: var(--ink); }

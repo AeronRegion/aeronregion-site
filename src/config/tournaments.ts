@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-//  TOURNAMENTS — slideshow photos and the latest bracket.
+//  TOURNAMENTS — slideshow photos and every tournament's results.
 //  Add images to public/images/tournaments/ and list them here.
 // ─────────────────────────────────────────────────────────────
 
@@ -17,16 +17,127 @@ export const slides = [
   { src: '/images/tournaments/group-pink-hall.webp', caption: 'Come for the bracket, stay for the community' },
 ];
 
-// Tournament shown under the slideshow (bracket + podium).
-export const latest = {
-  name: 'Regulation F Tournament',
-  date: 'July 18, 2026',
-  format: 'Double elimination',
-  bracketImage: '/images/tournaments/bracket.webp',
-  bracketLink: challonge,           // swap for the specific Challonge bracket URL
-  podium: [
-    { place: '1st', player: 'ThinkWeird' },
-    { place: '2nd', player: 'kaelreak' },
-    { place: '3rd', player: 'Sparklotix' },
-  ],
+export type Tournament = {
+  name: string;
+  date: string;            // YYYY-MM-DD
+  format: string;
+  players: number;
+  playersLabel?: string;   // e.g. 'teams' for team events (default 'players')
+  bracket: string;         // image in public/images/tournaments/brackets/
+  podium: { place: string; player: string }[];
+  link?: string;           // the event's own Challonge URL, if you have it
 };
+
+// Newest first. The first entry is featured as the latest tournament.
+// To add one: copy a block, put it at the top, and drop its bracket image in brackets/.
+export const tournaments: Tournament[] = [
+  {
+    name: 'Double Trouble Multibattle',
+    date: '2026-11-15',
+    format: 'Single elimination',
+    players: 8,
+    playersLabel: 'teams',
+    bracket: '/images/tournaments/brackets/2026-11-15-double-trouble.webp',
+    podium: [
+      { place: '1st', player: 'Team Ignition' },
+      { place: '2nd', player: 'Five Nights At Trick Room' },
+      { place: '3rd', player: 'Yin-Yang & idk man' },
+    ],
+  },
+  {
+    name: 'Monotype Scramble',
+    date: '2026-11-07',
+    format: 'Single elimination',
+    players: 10,
+    bracket: '/images/tournaments/brackets/2026-11-07-monotype-scramble.webp',
+    podium: [
+      { place: '1st', player: 'jemorpe1' },
+      { place: '2nd', player: 'Scav' },
+      { place: '3rd', player: 'DinoBug7278 & Sparklotix' },
+    ],
+  },
+  {
+    name: 'G-Max Battle',
+    date: '2026-11-01',
+    format: 'Single elimination',
+    players: 13,
+    bracket: '/images/tournaments/brackets/2026-11-01-gmax.webp',
+    podium: [
+      { place: '1st', player: 'bluetang' },
+      { place: '2nd', player: 'Hydrah' },
+      { place: '3rd', player: 'Scavarodka & DinoBug7278' },
+    ],
+  },
+  {
+    name: '[AR] Reg F',
+    date: '2026-10-24',
+    format: 'Double elimination',
+    players: 12,
+    bracket: '/images/tournaments/brackets/2026-10-24-reg-f.webp',
+    podium: [
+      { place: '1st', player: 'Jemorpe' },
+      { place: '2nd', player: 'IgnacioWey' },
+      { place: '3rd', player: 'Sparklotix' },
+    ],
+  },
+  {
+    name: 'VGC Reg H',
+    date: '2026-09-12',
+    format: 'Double elimination',
+    players: 13,
+    bracket: '/images/tournaments/brackets/2026-09-12-reg-h.webp',
+    podium: [
+      { place: '1st', player: 'devdragon14' },
+      { place: '2nd', player: 'Sparklotix' },
+      { place: '3rd', player: 'MildFlames' },
+    ],
+  },
+  {
+    name: 'VGC Modified Reg. F #2',
+    date: '2026-08-29',
+    format: 'Double elimination',
+    players: 9,
+    bracket: '/images/tournaments/brackets/2026-08-29-reg-f-2.webp',
+    podium: [
+      { place: '1st', player: 'JCDelirious' },
+      { place: '2nd', player: 'Nyanatsu' },
+      { place: '3rd', player: 'MildFlames' },
+    ],
+  },
+  {
+    name: '[AR] Mod. Regulation F',
+    date: '2026-08-15',
+    format: 'Double elimination',
+    players: 13,
+    bracket: '/images/tournaments/brackets/2026-08-15-mod-reg-f.webp',
+    podium: [
+      { place: '1st', player: 'adrift_gecko' },
+      { place: '2nd', player: 'Sparklotix' },
+      { place: '3rd', player: 'IgnacioWey' },
+    ],
+  },
+  {
+    name: 'Regulation F Tournament',
+    date: '2026-07-18',
+    format: 'Double elimination',
+    players: 16,
+    bracket: '/images/tournaments/brackets/2026-07-18-reg-f.webp',
+    podium: [
+      { place: '1st', player: 'ThinkWeird' },
+      { place: '2nd', player: 'kaelreak' },
+      { place: '3rd', player: 'Sparklotix' },
+    ],
+  },
+  {
+    name: '[AR] First Singles Tournament',
+    date: '2026-07-05',
+    format: 'Double elimination',
+    players: 9,
+    bracket: '/images/tournaments/brackets/2026-07-05-first-singles.webp',
+    podium: [
+      { place: '1st', player: 'monotropics' },
+      { place: '2nd', player: 'IgnacioWey' },
+      { place: '3rd', player: 'ThinkWeird' },
+    ],
+  },
+];

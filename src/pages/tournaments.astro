@@ -3,8 +3,11 @@ import Base from '../layouts/Base.astro';
 import Slideshow from '../components/Slideshow.astro';
 import Icon from '../components/Icon.astro';
 import { socials } from '../config/site';
-import { challonge, slides, latest } from '../config/tournaments';
+import { challonge, slides, tournaments } from '../config/tournaments';
+import { dayMonth, year, toDate } from '../lib/dates';
 const discord = socials.find((s) => s.icon === 'discord')!;
+const [latest, ...past] = tournaments;
+const meta = (t: typeof latest) => `${t.format}, ${t.players} ${t.playersLabel ?? 'players'}`;
 ---
 <Base title="Tournaments" description="Aeron Region tournaments: brackets, results, and photos from the arena.">
   <section class="wrap head">
@@ -20,35 +23,105 @@ const discord = socials.find((s) => s.icon === 'discord')!;
     <Slideshow slides={slides} label="Tournament photos" />
   </section>
 
-  <section class="wrap results">
-    <div>
-      <h2>{latest.name}</h2>
-      <p class="soft">{latest.date}, {latest.format.toLowerCase()}</p>
-      <ol class="podium">
-        {latest.podium.map((p) => (
-          <li><span class="place">{p.place}</span><span class="player">{p.player}</span></li>
+  {latest && (
+    <section class="wrap results">
+      <div>
+        <p class="kicker">Latest tournament</p>
+        <h2>{latest.name}</h2>
+        <p class="when"><time datetime={latest.date}><span class="d">{dayMonth(toDate(latest.date))}</span><span class="y">{year(toDate(latest.date))}</span></time></p>
+        <p class="soft">{meta(latest)}</p>
+        <ol class="podium">
+          {latest.podium.map((p) => (
+            <li><span class="place">{p.place}</span><span class="player">{p.player}</span></li>
+          ))}
+        </ol>
+        <a href={latest.link ?? challonge} target="_blank" rel="noopener">See it on Challonge</a>
+      </div>
+      <a class="bracket" href={latest.bracket} target="_blank" rel="noopener" title="Open full size">
+        <img src={latest.bracket} alt={`${latest.name} bracket`} loading="lazy" />
+      </a>
+    </section>
+  )}
+
+  {past.length > 0 && (
+    <section class="wrap history">
+      <h2>Past tournaments</h2>
+      <ul>
+        {past.map((t) => (
+          <li>
+            <details>
+              <summary>
+                <time datetime={t.date}><span class="d">{dayMonth(toDate(t.date))}</span><span class="y">{year(toDate(t.date))}</span></time>
+                <span class="name">{t.name}</span>
+                <span class="champ"><Icon name="trophy" size={16} /> {t.podium[0]?.player}</span>
+                <span class="chev"><Icon name="chevron" size={20} /></span>
+              </summary>
+              <div class="detail">
+                <div>
+                  <p class="soft">{meta(t)}</p>
+                  <ol class="podium small">
+                    {t.podium.map((p) => (
+                      <li><span class="place">{p.place}</span><span class="player">{p.player}</span></li>
+                    ))}
+                  </ol>
+                  {t.link && <a href={t.link} target="_blank" rel="noopener">See it on Challonge</a>}
+                </div>
+                <a class="bracket" href={t.bracket} target="_blank" rel="noopener" title="Open full size">
+                  <img src={t.bracket} alt={`${t.name} bracket`} loading="lazy" />
+                </a>
+              </div>
+            </details>
+          </li>
         ))}
-      </ol>
-      <a href={latest.bracketLink} target="_blank" rel="noopener">See the full bracket on Challonge</a>
-    </div>
-    <a class="bracket" href={latest.bracketImage} target="_blank" rel="noopener" title="Open full size">
-      <img src={latest.bracketImage} alt={`${latest.name} bracket`} loading="lazy" />
-    </a>
-  </section>
+      </ul>
+    </section>
+  )}
 </Base>
 
 <style>
   .head { padding-top: 3.5rem; padding-bottom: 1.75rem; }
   .intro { max-width: 58ch; font-size: 1.15rem; }
   .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+
   .results { display: grid; grid-template-columns: 280px 1fr; gap: 2.5rem; margin-top: 3.5rem; align-items: start; }
+  .kicker { font-family: var(--font-ui); font-weight: 700; color: var(--teal-ink); margin: 0 0 .3rem; }
   .podium { list-style: none; padding: 0; margin: 1rem 0 1.25rem; }
   .podium li { display: flex; gap: 1rem; align-items: baseline; padding: .6rem 0; border-top: 2px solid var(--ink); }
   .podium li:last-child { border-bottom: 2px solid var(--ink); }
-  .place { font-family: var(--font-ui); font-weight: 700; width: 2.5rem; color: var(--ink-soft); }
+  .place { font-family: var(--font-ui); font-weight: 700; width: 2.5rem; flex: none; color: var(--ink-soft); }
   .player { font-family: var(--font-ui); font-weight: 700; font-size: 1.25rem; }
   .podium li:first-child .player { font-size: 1.5rem; }
+  .podium.small .player, .podium.small li:first-child .player { font-size: 1.1rem; }
   .bracket { display: block; border: 4px solid #000; background: #2b2b2b; }
   .bracket img { width: 100%; }
-  @media (max-width: 880px) { .results { grid-template-columns: 1fr; } }
+
+  .history { margin-top: 4.5rem; }
+  .history ul { list-style: none; padding: 0; margin: 0; }
+  .history li { border-top: 2px solid var(--ink); }
+  .history li:last-child { border-bottom: 2px solid var(--ink); }
+  summary {
+    display: grid; grid-template-columns: 5.5rem 1fr auto 20px; gap: 1rem; align-items: center;
+    padding: .9rem .5rem; cursor: pointer; list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: var(--petal-deep); }
+  .chev { display: flex; transition: transform .15s; }
+  details[open] .chev { transform: rotate(180deg); }
+  time { font-family: var(--font-ui); line-height: 1.1; }
+  time .d { display: block; font-weight: 700; font-size: 1.2rem; }
+  time .y { display: block; color: var(--ink-soft); }
+  .when { margin: 0 0 .4rem; }
+  .name { font-family: var(--font-ui); font-weight: 700; font-size: 1.15rem; }
+  .champ { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--font-ui); font-weight: 600; color: var(--teal-ink); }
+  .detail { display: grid; grid-template-columns: 240px 1fr; gap: 2rem; padding: .5rem .5rem 1.75rem; align-items: start; }
+  .detail .soft { margin: 0; }
+
+  @media (max-width: 880px) {
+    .results, .detail { grid-template-columns: 1fr; }
+    summary { grid-template-columns: 1fr 20px; gap: .2rem 1rem; }
+    summary { grid-template-columns: 4.5rem 1fr 20px; }
+    summary time { grid-column: 1; grid-row: 1 / span 2; }
+    summary .name, summary .champ { grid-column: 2; }
+    .chev { grid-column: 3; grid-row: 1 / span 2; }
+  }
 </style>

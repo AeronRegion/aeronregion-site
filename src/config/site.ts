@@ -26,8 +26,8 @@ export const stores = [
 // Main server (home page)
 export const mainServer = {
   name: 'Aeron Region',
-  ip: 'hmac.minecraft.best',      // address shown to players
-  statusHost: 'hmac.mc.gg',       // address the live player count checks (must resolve publicly)
+  ip: 'ar.minecraft.best',        // address shown to players
+  statusHost: 'ar.minecraft.best', // address the live player count checks (must resolve publicly)
   pack: 'Cobbleverse',
   packVersion: '1.7.42',
   loader: 'Fabric 1.21.1',
