@@ -23,7 +23,7 @@ const discord = socials.find((s) => s.icon === 'discord')!;
   <section class="wrap results">
     <div>
       <h2>{latest.name}</h2>
-      <p class="soft">{latest.format}</p>
+      <p class="soft">{latest.date}, {latest.format.toLowerCase()}</p>
       <ol class="podium">
         {latest.podium.map((p) => (
           <li><span class="place">{p.place}</span><span class="player">{p.player}</span></li>

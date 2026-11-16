@@ -17,9 +17,10 @@ export const slides = [
   { src: '/images/tournaments/group-pink-hall.webp', caption: 'The community in the blossom hall' },
 ];
 
-// Most recent finished tournament. Update after each event.
+// Tournament shown under the slideshow (bracket + podium).
 export const latest = {
-  name: 'Latest tournament',        // e.g. '[AR] Doubles Tournament'
+  name: 'Regulation F Tournament',
+  date: 'July 18, 2026',
   format: 'Double elimination',
   bracketImage: '/images/tournaments/bracket.webp',
   bracketLink: challonge,           // swap for the specific Challonge bracket URL
