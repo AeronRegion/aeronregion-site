@@ -16,7 +16,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
     <div class="dock">
       <div class="wrap">
         <h1 class="title"><span class="nametag">{site.name}</span></h1>
-        <p class="sub">Cobblemon on {mainServer.pack} {mainServer.packVersion}</p>
+        <p class="sub"><span class="nametag">{site.tagline}</span></p>
       </div>
       <div class="wrap dock-inner">
         <ServerStatus ip={mainServer.ip} />
@@ -30,7 +30,7 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
 
   <section class="wrap split">
     <div class="intro">
-      <p class="lede">{site.tagline} Run your own gym, challenge the league, or just build something nice under the blossoms.</p>
+      <p class="lede">Cobblemon on {mainServer.pack}, with a gym league, tournaments, and a second server that tries a new modpack every month. Run your own gym, challenge the league, or just build something nice under the blossoms.</p>
       <p><a href={challonge.href} target="_blank" rel="noopener">Tournament brackets on Challonge</a></p>
 
       {latest.length > 0 && (
@@ -43,11 +43,29 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
     </div>
 
     <aside class="side">
-      <div class="panel pixel-corners">
-        <h2>Experimental server</h2>
-        <p class="soft">A second server with a new modpack every month or so, picked by community vote. Access is by request in Discord.</p>
-        <p class="now">Now playing<br /><strong>{experimental.current.name}</strong></p>
-        <a class="block" href="/experimental/">See the current pack</a>
+      <div class="panel pixel-corners" id="modpacks">
+        <h2>Get the modpacks</h2>
+        <p class="soft">Install the modpack in your launcher, then join with the server address.</p>
+
+        <div class="pack">
+          <p class="now">Main server<br /><strong>{mainServer.pack} {mainServer.packVersion}</strong></p>
+          <code class="addr">{mainServer.ip}</code>
+          <div class="dl">
+            {mainServer.modrinth && <a class="block" href={mainServer.modrinth} target="_blank" rel="noopener"><Icon name="download" size={18} /> Modrinth</a>}
+            {mainServer.curseforge && <a class="block stone" href={mainServer.curseforge} target="_blank" rel="noopener">CurseForge</a>}
+          </div>
+        </div>
+
+        <div class="pack">
+          <p class="now">Experimental server<br /><strong>{experimental.current.name} {experimental.current.version}</strong></p>
+          <code class="addr">{experimental.ip}</code>
+          {experimental.requestOnly && <p class="soft small">Whitelisted. Ask for access in Discord.</p>}
+          <div class="dl">
+            {experimental.current.modrinth && <a class="block" href={experimental.current.modrinth} target="_blank" rel="noopener"><Icon name="download" size={18} /> Modrinth</a>}
+            {experimental.current.curseforge && <a class="block stone" href={experimental.current.curseforge} target="_blank" rel="noopener">CurseForge</a>}
+          </div>
+          <p class="small"><a href="/experimental/">About the experimental server</a></p>
+        </div>
       </div>
 
       <div class="panel archive pixel-corners">
@@ -74,9 +92,11 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
   .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 65%; }
   .dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 6rem 0 1.5rem;
     background: linear-gradient(0deg, rgb(53 24 32 / .96) 0%, rgb(53 24 32 / .8) 45%, transparent 100%); }
-  .title { margin: 0 0 0 -.3em; font-size: clamp(2.6rem, 7vw, 5.2rem); font-weight: 700; }
+  .title { margin: 0 0 0 -.3em; font-size: clamp(2.8rem, 8vw, 6rem); font-weight: 700; }
+  .title .nametag, .sub .nametag { background: rgb(0 0 0 / .55); text-shadow: 3px 3px 0 rgb(0 0 0 / .5); }
   .title .nametag { padding: .02em .3em .08em; }
-  .sub { margin: .5rem 0 1.25rem; font-family: var(--font-pixel); font-size: 1.2rem; color: var(--on-brick-soft); }
+  .sub { margin: .6rem 0 1.4rem -.45em; font-size: clamp(1.3rem, 2.6vw, 1.9rem); }
+  .sub .nametag { padding: .1em .45em .15em; }
   .dock-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
   .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
 
@@ -91,6 +111,12 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
   .now { font-family: var(--font-pixel); color: var(--on-brick-soft); }
   .now strong { color: #fff; font-size: 1.2rem; font-weight: 600; }
   .archive { background: var(--brick-deep); }
+  .pack { border-top: 2px solid var(--brick-deep); padding-top: 1rem; margin-top: 1rem; }
+  .pack .now { margin-bottom: .4rem; }
+  .addr { display: inline-block; font-family: var(--font-pixel); background: rgb(0 0 0 / .3); padding: .1rem .5rem; margin-bottom: .75rem; }
+  .dl { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .dl .block { font-size: 1rem; padding: .45rem .85rem; }
+  .small { font-size: .92rem; margin: .6rem 0 0; }
 
   .trailer { margin-top: 4.5rem; }
   .frame { aspect-ratio: 16/9; border: 4px solid var(--ink); background: #000; }
@@ -99,6 +125,6 @@ const challonge = socials.find((s) => s.icon === 'trophy')!;
   @media (max-width: 880px) {
     .split { grid-template-columns: 1fr; gap: 2.5rem; }
     .shot { object-position: 45% 65%; }
-    .title { margin-left: 0; }
+    .title, .sub { margin-left: 0; }
   }
 </style>

@@ -5,7 +5,7 @@
 
 export const site = {
   name: 'Aeron Region',
-  tagline: 'A Cobblemon community with a gym league, tournaments, and a lot of heart.',
+  tagline: 'A Minecraft community',
   url: 'https://aeronregion.net',
 };
 
@@ -29,6 +29,9 @@ export const mainServer = {
   ip: 'hmac.minecraft.best',
   pack: 'Cobbleverse',
   packVersion: '1.7.42',
+  loader: 'Fabric 1.21.1',
+  modrinth: 'https://modrinth.com/modpack/cobbleverse',
+  curseforge: '', // add the CurseForge link here if you want it shown
   trailer: 'https://www.youtube.com/embed/2RsB5djp1go',
 };
 
