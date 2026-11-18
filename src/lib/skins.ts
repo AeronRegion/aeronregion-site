@@ -19,17 +19,38 @@ async function slot<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
+// The default Steve image for the same render type and size, used to spot
+// when the service returns Steve instead of the player's real skin.
+const steves = new Map<string, Promise<string | null>>();
+function steveFor(url: string) {
+  const u = new URL(url);
+  const parts = u.pathname.split('/'); // ['', 'avatar' | 'body', id, size]
+  if (parts.length < 3 || parts[2] === 'MHF_Steve') return Promise.resolve(null);
+  parts[2] = 'MHF_Steve';
+  const key = parts.join('/');
+  if (!steves.has(key)) {
+    steves.set(key, fetch(u.origin + key, { signal: AbortSignal.timeout(10000) })
+      .then(async (r) => (r.ok ? Buffer.from(await r.arrayBuffer()).toString('base64') : null))
+      .catch(() => null));
+  }
+  return steves.get(key)!;
+}
+
 async function download(url: string): Promise<string> {
   if (process.env.SKIP_SKINS) return url;
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 4; attempt++) {
     try {
       const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (res.ok) {
-        const buf = Buffer.from(await res.arrayBuffer());
-        return `data:${res.headers.get('content-type') ?? 'image/png'};base64,${buf.toString('base64')}`;
+        const b64 = Buffer.from(await res.arrayBuffer()).toString('base64');
+        const steve = await steveFor(url);
+        if (!steve || b64 !== steve || attempt === 3) {
+          return `data:${res.headers.get('content-type') ?? 'image/png'};base64,${b64}`;
+        }
+        console.warn(`[skins] got default Steve for ${url}, retrying`);
       }
     } catch {}
-    await new Promise((r) => setTimeout(r, 800 * (attempt + 1)));
+    await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
   }
   console.warn(`[skins] could not download ${url}, using live URL`);
   return url;

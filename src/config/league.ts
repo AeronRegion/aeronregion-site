@@ -4,6 +4,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { s2Matches } from '../data/s2-matches';
+import { uuids } from '../data/uuids';
 
 export type Leader = { ign: string; type: string; format?: string };
 // [date YYYY-MM-DD, gym type (or 'E4 1'..'E4 4', 'Champion'), challenger IGN, challenger won? 1 : 0]
@@ -145,5 +146,6 @@ export const typeColors: Record<string, string> = {
 };
 
 // Player head images, by Minecraft username.
-export const head = (ign: string, size = 64) => `https://mc-heads.net/avatar/${encodeURIComponent(ign)}/${size}`;
-export const body = (ign: string, size = 160) => `https://mc-heads.net/body/${encodeURIComponent(ign)}/${size}`;
+const id = (ign: string) => uuids[ign] ?? Object.entries(uuids).find(([k]) => k.toLowerCase() === ign.toLowerCase())?.[1] ?? encodeURIComponent(ign);
+export const head = (ign: string, size = 64) => `https://mc-heads.net/avatar/${id(ign)}/${size}`;
+export const body = (ign: string, size = 160) => `https://mc-heads.net/body/${id(ign)}/${size}`;
