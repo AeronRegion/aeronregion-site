@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import LeagueSeason from '../components/LeagueSeason.astro';
+import Icon from '../components/Icon.astro';
+import { socials } from '../config/site';
+import { seasons, resources } from '../config/league';
+const discord = socials.find((s) => s.icon === 'discord')!;
+---
+<Base title="Gym League" description="The Aeron Region Gym League: monotype gyms, the Elite Four, and the Champion. Rosters, standings and results for every season.">
+  <section class="wrap head">
+    <h1>Gym League</h1>
+    <p class="intro">Fifteen monotype gyms, four Elite Four members, and one Champion. Earn every badge, beat the Elite Four, then take down the Champion to clear the league. Rosters and standings for every season are below.</p>
+    <div class="actions">
+      <a class="block" href={resources[0].href} target="_blank" rel="noopener"><Icon name="download" size={18} /> Season 2 rules</a>
+      <a class="block stone" href={discord.href} target="_blank" rel="noopener"><Icon name="discord" size={18} /> Submit your team in Discord</a>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="tabs" role="tablist" aria-label="Seasons">
+      {seasons.map((s, i) => (
+        <button role="tab" type="button" id={`tab-${s.id}`} aria-controls={`panel-${s.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+          {s.name}{s.status === 'current' && <span class="live">Current</span>}
+        </button>
+      ))}
+    </div>
+    {seasons.map((s, i) => (
+      <div role="tabpanel" id={`panel-${s.id}`} aria-labelledby={`tab-${s.id}`} hidden={i !== 0} class="panel">
+        <LeagueSeason season={s} />
+      </div>
+    ))}
+  </section>
+
+  <section class="wrap resources">
+    <h2>Resources</h2>
+    <ul>
+      {resources.map((r) => (
+        <li><a href={r.href} target="_blank" rel="noopener">{r.label}</a>{r.note && <span class="soft"> {r.note}</span>}</li>
+      ))}
+      <li><a href={discord.href} target="_blank" rel="noopener">Aeron Region Discord</a><span class="soft"> Team submissions, challenges and announcements</span></li>
+    </ul>
+  </section>
+</Base>
+
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.tabs [role=tab]')];
+  const select = (t: HTMLButtonElement) => {
+    tabs.forEach((x) => {
+      const on = x === t;
+      x.setAttribute('aria-selected', String(on));
+      x.tabIndex = on ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')!)!.hidden = !on;
+    });
+    // make sure newly shown blocks aren't left waiting for a scroll reveal
+    document.querySelectorAll('.panel:not([hidden]) .reveal').forEach((el) => el.classList.add('in'));
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      const n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : -1;
+      if (n >= 0 && n < tabs.length) { tabs[n].focus(); select(tabs[n]); }
+    });
+  });
+</script>
+
+<style>
+  .head { padding-top: 3.5rem; padding-bottom: 1.5rem; }
+  .intro { max-width: 60ch; font-size: 1.15rem; }
+  .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+  .tabs { display: flex; gap: .5rem; margin-bottom: 2rem; border-bottom: 4px solid var(--ink); }
+  .tabs button {
+    font-family: var(--font-ui); font-weight: 700; font-size: 1.1rem; cursor: pointer;
+    padding: .55rem 1.1rem; background: var(--petal-deep); color: var(--ink);
+    border: 2px solid var(--ink); border-bottom: 0; display: inline-flex; gap: .5rem; align-items: center;
+  }
+  .tabs button[aria-selected='true'] { background: var(--ink); color: var(--petal); }
+  .live { font-size: .75rem; background: var(--teal); color: var(--ink); padding: 0 .4rem; }
+  .resources { margin-top: 4.5rem; }
+  .resources ul { list-style: none; padding: 0; margin: 0; }
+  .resources li { padding: .7rem 0; border-top: 2px solid var(--ink); }
+  .resources li:last-child { border-bottom: 2px solid var(--ink); }
+  .resources a { font-family: var(--font-ui); font-weight: 700; }
+</style>
