@@ -73,7 +73,7 @@ export const seasons: Season[] = [
           { ign: 'CatLoverSSB', type: 'Normal', format: 'Doubles 6v6' },
           { ign: 'EscanorOP', type: 'Rock', format: 'Doubles 6v6' },
           { ign: 'MilkFister69', type: 'Water', format: 'VGC Bring 6, Pick 4' },
-          { ign: 'mqnz', type: 'Flying', format: 'VGC Bring 6, Pick 4' },
+          { ign: '_xdiad', type: 'Flying', format: 'VGC Bring 6, Pick 4' },
         ],
       },
     ],

@@ -41,7 +41,7 @@ export const s2Matches: Match[] = [
   ['2026-10-17', 'Dark', 'DinoBug7278', 0],
   ['2026-10-17', 'Poison', 'CmdrCody16', 0],
   ['2026-10-17', 'Ghost', 'CmdrCody16', 1],
-  ['2026-10-17', 'Electric', 'mqnz', 0],
+  ['2026-10-17', 'Electric', '_xdiad', 0],
   ['2026-10-17', 'Ghost', 'Astolfo_0OC', 1],
   ['2026-10-17', 'Ground', 'Astolfo_0OC', 0],
   ['2026-10-17', 'Ghost', 'IgnacioWey', 1],
