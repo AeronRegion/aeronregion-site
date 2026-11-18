@@ -81,7 +81,7 @@ const ranked = [...season.standings].sort((x, y) =>
               <img src={head(l.ign, 48)} alt="" width="40" height="40" loading="lazy" onerror={onErr} />
               <span class="ign">{l.ign}</span>
               <TypeChip type={l.type} />
-              <span class="fmt">{l.format}{rec.get(l.type) && <> <span class="rec" title="Leader wins - losses">{rec.get(l.type)![0]}-{rec.get(l.type)![1]}</span></>}</span>
+              <span class="fmt">{l.format}{rec.get(l.type) && <> <span class="rec" title="Leader record against challengers">{rec.get(l.type)![0]}W {rec.get(l.type)![1]}L</span></>}</span>
             </li>
           ))}
         </ol>
