@@ -3,7 +3,11 @@
 //  Use exact Minecraft usernames (IGN): player heads are loaded from them.
 // ─────────────────────────────────────────────────────────────
 
+import { s2Matches } from '../data/s2-matches';
+
 export type Leader = { ign: string; type: string; format?: string };
+// [date YYYY-MM-DD, gym type (or 'E4 1'..'E4 4', 'Champion'), challenger IGN, challenger won? 1 : 0]
+export type Match = [string, string, string, 0 | 1];
 export type Challenger = {
   ign: string;
   badges: string[];      // IGNs of the gym leaders they've beaten
@@ -20,9 +24,9 @@ export type Season = {
   elite4: Leader[];      // in order, E4 1 first
   groups: { name: string; note?: string; leaders: Leader[] }[];
   victors: string[];     // challengers who cleared the league
-  standings: Challenger[];
+  standings: Challenger[];  // filled in automatically when `matches` is set
+  matches?: Match[];        // battle log; standings are worked out from it
   standingsAsOf?: string;
-  sampleStandings?: boolean; // shows a "sample data" note (mockup only)
 };
 
 export const resources = [
@@ -74,14 +78,8 @@ export const seasons: Season[] = [
       },
     ],
     victors: [],
-    // SAMPLE ONLY — replace with the real standings
-    sampleStandings: true,
-    standingsAsOf: '2026-10-27',
-    standings: [
-      { ign: 'Steve', badges: ['ChaosJokerHD', 'glambien', 'jmmorfe', 'PandorasPadlock', 'devdragon14', 'Lousive', 'rxirei', 'Astolfo_0OC', 'Scavarodka'] },
-      { ign: 'Alex', badges: ['ChaosJokerHD', 'glambien', 'jmmorfe', 'devdragon14', 'TsarHydrah', 'Lousive'] },
-      { ign: 'Notch', badges: ['glambien', 'PandorasPadlock', 'TsarHydrah'] },
-    ],
+    matches: s2Matches,
+    standings: [],
   },
   {
     id: 's1',
@@ -117,6 +115,26 @@ export const seasons: Season[] = [
     standings: [],
   },
 ];
+
+// Work out standings from a season's battle log.
+for (const s of seasons) {
+  if (!s.matches?.length) continue;
+  const byType = new Map(s.groups.flatMap((g) => g.leaders.map((l) => [l.type, l.ign] as const)));
+  const table = new Map<string, Challenger>();
+  for (const [, gym, who, won] of s.matches) {
+    const c = table.get(who) ?? { ign: who, badges: [], e4: 0 };
+    table.set(who, c);
+    if (!won) continue;
+    if (gym.startsWith('E4')) c.e4 = Math.max(c.e4 ?? 0, Number(gym.slice(3)));
+    else if (gym === 'Champion') c.champion = true;
+    else {
+      const leader = byType.get(gym);
+      if (leader && !c.badges.includes(leader)) c.badges.push(leader);
+    }
+  }
+  s.standings = [...table.values()];
+  s.standingsAsOf ??= s.matches.reduce((d, m) => (m[0] > d ? m[0] : d), '');
+}
 
 // Pokémon type colors for the type chips. Custom E4 themes fall back to `theme`.
 export const typeColors: Record<string, string> = {

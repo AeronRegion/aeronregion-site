@@ -12,8 +12,17 @@ const stage = (c: Season['standings'][number]) => {
   if ((c.e4 ?? 0) > 0 || c.badges.length >= total) return `Elite Four ${c.e4 ?? 0}/4`;
   const a = season.groups[0]?.leaders.map((l) => l.ign) ?? [];
   const aCount = c.badges.filter((b) => a.includes(b)).length;
-  return season.groups.length > 1 && aCount >= a.length - 1 ? 'Group B' : season.groups[0].name;
+  return season.groups.length > 1 && aCount >= a.length - 1 ? season.groups[1].name : season.groups[0].name;
 };
+// leader records from the battle log: leader wins - leader losses
+const rec = new Map<string, [number, number]>();
+for (const [, gym, , won] of season.matches ?? []) {
+  const r = rec.get(gym) ?? [0, 0];
+  r[won ? 1 : 0]++;
+  rec.set(gym, r);
+}
+const log = [...(season.matches ?? [])].reverse();
+const leaderOf = new Map(gyms.map((g) => [g.type, g.ign]));
 const ranked = [...season.standings].sort((x, y) =>
   Number(!!y.champion) - Number(!!x.champion) || (y.e4 ?? 0) - (x.e4 ?? 0) || y.badges.length - x.badges.length);
 ---
@@ -72,7 +81,7 @@ const ranked = [...season.standings].sort((x, y) =>
               <img src={head(l.ign, 48)} alt="" width="40" height="40" loading="lazy" onerror={onErr} />
               <span class="ign">{l.ign}</span>
               <TypeChip type={l.type} />
-              {l.format && <span class="fmt">{l.format}</span>}
+              <span class="fmt">{l.format}{rec.get(l.type) && <> <span class="rec" title="Leader wins - losses">{rec.get(l.type)![0]}-{rec.get(l.type)![1]}</span></>}</span>
             </li>
           ))}
         </ol>
@@ -83,7 +92,7 @@ const ranked = [...season.standings].sort((x, y) =>
   {ranked.length > 0 && (
     <section class="standings">
       <h3>Challenger standings</h3>
-      {season.standingsAsOf && <p class="soft note">As of {fmt(season.standingsAsOf)}{season.sampleStandings && <strong class="sample"> (sample data for the mockup)</strong>}</p>}
+      {season.standingsAsOf && <p class="soft note">As of {fmt(season.standingsAsOf)}</p>}
       <div class="table">
         {ranked.map((c) => (
           <div class="row">
@@ -106,6 +115,27 @@ const ranked = [...season.standings].sort((x, y) =>
         ))}
       </div>
       <p class="soft legend">Each square is a gym badge, colored by type when earned. The last four are the Elite Four.</p>
+    </section>
+  )}
+
+  {log.length > 0 && (
+    <section class="log">
+      <details>
+        <summary><h3>Battle log</h3><span class="soft">{log.length} battles, newest first</span></summary>
+        <table>
+          <thead><tr><th>Date</th><th>Gym</th><th>Challenger</th><th>Result</th></tr></thead>
+          <tbody>
+            {log.map(([d, gym, who, won]) => (
+              <tr>
+                <td class="d">{dayMonth(toDate(d))}</td>
+                <td><TypeChip type={gym} /> <span class="soft">{leaderOf.get(gym) ?? ''}</span></td>
+                <td class="ign">{who}</td>
+                <td class:list={['res', { win: won }]}>{won ? 'Badge earned' : 'Leader won'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </details>
     </section>
   )}
 </div>
@@ -160,7 +190,19 @@ const ranked = [...season.standings].sort((x, y) =>
   .count strong { font-size: 1.2rem; }
   .where { font-family: var(--font-ui); font-weight: 600; font-size: .9rem; color: var(--teal-ink); text-align: right; }
   .legend { font-size: .9rem; margin-top: .6rem; }
-  .sample { color: #a3324a; }
+  .rec { font-family: var(--font-ui); font-weight: 600; color: var(--ink); margin-left: .4rem; }
+
+  .log summary { display: flex; align-items: baseline; gap: 1rem; cursor: pointer; list-style: none; }
+  .log summary::-webkit-details-marker { display: none; }
+  .log summary h3 { margin: 0; }
+  .log summary::after { content: 'Show'; margin-left: auto; font-family: var(--font-ui); font-weight: 700; text-decoration: underline; }
+  .log details[open] summary::after { content: 'Hide'; }
+  .log table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .95rem; }
+  .log th { text-align: left; font-family: var(--font-ui); color: var(--ink-soft); padding: .4rem .6rem; border-bottom: 2px solid var(--ink); }
+  .log td { padding: .4rem .6rem; border-bottom: 1px solid rgb(46 26 32 / .2); }
+  .log .d { font-family: var(--font-ui); font-weight: 700; white-space: nowrap; }
+  .log .res { font-family: var(--font-ui); font-weight: 600; color: var(--ink-soft); }
+  .log .res.win { color: var(--teal-ink); }
 
   @media (max-width: 760px) {
     .row { grid-template-columns: 1fr auto; }
