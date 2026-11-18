@@ -1,0 +1,18 @@
+---
+import { typeColors } from '../config/league';
+const { type } = Astro.props as { type: string };
+const bg = typeColors[type] ?? typeColors.theme;
+// pick readable text color for the chip
+const hex = bg.replace('#', '');
+const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const light = (r * 299 + g * 587 + b * 114) / 1000 > 150;
+---
+<span class="chip" style={`--c:${bg};--t:${light ? '#2e1a20' : '#fff'}`}>{type}</span>
+
+<style>
+  .chip {
+    display: inline-block; font-family: var(--font-ui); font-weight: 700; font-size: .8rem;
+    padding: .05rem .5rem; background: var(--c); color: var(--t); border: 2px solid rgb(0 0 0 / .35);
+    white-space: nowrap;
+  }
+</style>

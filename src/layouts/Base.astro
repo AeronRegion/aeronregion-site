@@ -32,7 +32,7 @@ const og = new URL('/images/og.jpg', site.url).href;
       const targets = [
         '.split > .intro > *', '.side > *', '.trailer',
         '.head > *', '.show', '.results > *', '.history > ul > li',
-        '.list > li', '.now .wrap > *', '.cols > *', '.page > *', '.post > *',
+        '.list > li', '.now .wrap > *', '.cols > *', '.page > *', '.post > *', '.resources',
       ].join(',');
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
         const els = [...document.querySelectorAll<HTMLElement>(targets)];

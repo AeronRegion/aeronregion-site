@@ -62,6 +62,7 @@ export const experimental = {
 // Top navigation — order here is the order shown.
 export const nav = [
   { label: 'Home', href: '/' },
+  { label: 'Gym League', href: '/league/' },
   { label: 'Tournaments', href: '/tournaments/' },
   { label: 'Experimental', href: '/experimental/' },
   { label: 'Worlds', href: '/worlds/' },
