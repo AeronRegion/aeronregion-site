@@ -29,7 +29,7 @@ export const mainServer = {
   ip: 'ar.minecraft.best',        // address shown to players
   statusHost: 'ar.minecraft.best', // address the live player count checks (must resolve publicly)
   pack: 'Cobbleverse',
-  packVersion: '1.7.42',
+  packVersion: '1.8.0',
   loader: 'Fabric 1.21.1',
   modrinth: 'https://modrinth.com/modpack/cobbleverse',
   curseforge: 'https://www.curseforge.com/minecraft/modpacks/cobbleverse-cobblemon',

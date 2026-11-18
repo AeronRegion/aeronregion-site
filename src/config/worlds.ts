@@ -22,7 +22,7 @@ export const worlds: World[] = [
   {
     label: 'Cobbleverse',
     server: 'Main server',
-    pack: 'Cobbleverse 1.7.42',
+    pack: 'Cobbleverse 1.8.0',
     mc: 'Fabric',
     period: 'Ongoing',
     description: 'The Aeron Region home world: gyms, tournament arenas, and everything the community has built.',
