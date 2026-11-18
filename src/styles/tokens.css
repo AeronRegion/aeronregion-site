@@ -26,7 +26,7 @@
   --tag-fg:       #ffffff;
 
   /* Type */
-  --font-pixel:   'Pixelify Sans Variable', 'Pixelify Sans', monospace;   /* big headings only */
+  --font-pixel:   'Jersey 10', 'Chakra Petch', monospace;               /* big headings only */
   --font-ui:      'Chakra Petch', 'Segoe UI', system-ui, sans-serif;     /* blocky but readable: nav, buttons, labels, small headings */
   --font-body:    'Nunito Variable', 'Nunito', system-ui, sans-serif;
 
