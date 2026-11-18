@@ -179,5 +179,5 @@ export const s2Matches: Match[] = [
   ['2026-11-12', 'Ghost', 'Erziika', 1],
   ['2026-11-14', 'Electric', 'Erziika', 1],
   ['2026-11-15', 'Fighting', 'Erziika', 1],
-  ['2026-11-17', 'Ground', 'Mcloving', 0],
+  ['2026-11-17', 'Ground', 'Coblettt', 0],
 ];
