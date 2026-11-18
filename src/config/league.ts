@@ -54,8 +54,8 @@ export const seasons: Season[] = [
         note: '6 of 7 badges unlocks Group B',
         leaders: [
           { ign: 'ChaosJokerHD', type: 'Ghost', format: 'Doubles 6v6' },
-          { ign: 'glambien', type: 'Poison', format: 'Doubles 6v6' },
-          { ign: 'jmmorfe', type: 'Ground', format: 'VGC Bring 6, Pick 4' },
+          { ign: 'Glambien', type: 'Poison', format: 'Doubles 6v6' },
+          { ign: 'Jmmorfe', type: 'Ground', format: 'VGC Bring 6, Pick 4' },
           { ign: 'PandorasPadlock', type: 'Fighting', format: 'Singles 6v6' },
           { ign: 'devdragon14', type: 'Dark', format: 'VGC Bring 6, Pick 4' },
           { ign: 'Lousive', type: 'Bug', format: 'VGC Bring 6, Pick 4' },
@@ -99,7 +99,7 @@ export const seasons: Season[] = [
         name: 'Gyms 1-10',
         leaders: [
           { ign: 'BlueSeaChief', type: 'Rock', format: 'Doubles 6v6' },
-          { ign: 'Kazuhiro74', type: 'Fairy', format: 'VGC' },
+          { ign: 'Kazuhiro75', type: 'Fairy', format: 'VGC' },
           { ign: 'Adrift_Gecko', type: 'Electric', format: 'Triples' },
           { ign: 'acemiller5', type: 'Steel', format: 'Singles' },
           { ign: 'rxirei', type: 'Psychic', format: 'Singles' },
