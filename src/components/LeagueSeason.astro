@@ -1,13 +1,12 @@
 ---
 import TypeChip from './TypeChip.astro';
-import { head, body, typeColors, type Season } from '../config/league';
+import { typeColors, type Season } from '../config/league';
 import { dayMonth, year, toDate } from '../lib/dates';
-import { skin } from '../lib/skins';
+import { face, body } from '../lib/skins';
 const { season } = Astro.props as { season: Season };
 const gyms = season.groups.flatMap((g) => g.leaders.map((l) => ({ ...l, group: g.name })));
 const total = gyms.length;
 const fmt = (iso: string) => `${dayMonth(toDate(iso))} ${year(toDate(iso))}`;
-const onErr = "this.onerror=null;this.src='https://mc-heads.net/avatar/MHF_Steve/64'";
 const stage = (c: Season['standings'][number]) => {
   if (c.champion) return 'League cleared';
   if ((c.e4 ?? 0) > 0 || c.badges.length >= total) return `Elite Four ${c.e4 ?? 0}/4`;
@@ -24,14 +23,12 @@ for (const [, gym, , won] of season.matches ?? []) {
 }
 const log = [...(season.matches ?? [])].reverse();
 const leaderOf = new Map(gyms.map((g) => [g.type, g.ign]));
-// download every skin image this season needs, once, at build time
-const wanted = [
-  ...[...season.victors, season.champion.ign, ...season.elite4.map((e) => e.ign)].flatMap((n) => [body(n), body(n, 200)]),
-  ...gyms.map((g) => head(g.ign, 48)),
-  ...season.standings.map((c) => head(c.ign, 48)),
-];
-const img = new Map(await Promise.all([...new Set(wanted)].map(async (u) => [u, await skin(u)] as const)));
-const src = (u: string) => img.get(u) ?? u;
+// draw every player's skin from their Mojang skin file, once, at build time
+const people = [...new Set([...season.victors, season.champion.ign, ...season.elite4.map((e) => e.ign),
+  ...gyms.map((g) => g.ign), ...season.standings.map((c) => c.ign)])];
+const faces = new Map(await Promise.all(people.map(async (n) => [n, await face(n, 48)] as const)));
+const bodies = new Map(await Promise.all([...season.victors, ...season.elite4.map((e) => e.ign)].map(async (n) => [n, await body(n, 80)] as const)));
+const champBody = await body(season.champion.ign, 96);
 const ranked = [...season.standings].sort((x, y) =>
   Number(!!y.champion) - Number(!!x.champion) || (y.e4 ?? 0) - (x.e4 ?? 0) || y.badges.length - x.badges.length);
 ---
@@ -46,7 +43,7 @@ const ranked = [...season.standings].sort((x, y) =>
       <div class="stage">
         {season.victors.map((v) => (
           <figure>
-            <img src={src(body(v))} alt="" width="80" height="160" loading="lazy" onerror={onErr} />
+            <img src={bodies.get(v)} alt="" width="80" height="160" loading="lazy" />
             <figcaption><span class="nametag">{v}</span></figcaption>
           </figure>
         ))}
@@ -58,7 +55,7 @@ const ranked = [...season.standings].sort((x, y) =>
     <h3>Champion and Elite Four</h3>
     <div class="stage">
       <figure class="champ">
-        <img src={src(body(season.champion.ign, 200))} alt="" width="100" height="200" loading="lazy" onerror={onErr} />
+        <img src={champBody} alt="" width="96" height="192" loading="lazy" />
         <figcaption>
           <span class="role">Champion</span>
           <span class="nametag">{season.champion.ign}</span>
@@ -67,7 +64,7 @@ const ranked = [...season.standings].sort((x, y) =>
       </figure>
       {season.elite4.map((e, i) => (
         <figure>
-          <img src={src(body(e.ign))} alt="" width="80" height="160" loading="lazy" onerror={onErr} />
+          <img src={bodies.get(e.ign)} alt="" width="80" height="160" loading="lazy" />
           <figcaption>
             <span class="role">Elite Four {i + 1}</span>
             <span class="nametag">{e.ign}</span>
@@ -87,7 +84,7 @@ const ranked = [...season.standings].sort((x, y) =>
         <ol>
           {g.leaders.map((l) => (
             <li>
-              <img src={src(head(l.ign, 48))} alt="" width="40" height="40" loading="lazy" onerror={onErr} />
+              <img src={faces.get(l.ign)} alt="" width="40" height="40" loading="lazy" />
               <span class="ign">{l.ign}</span>
               <TypeChip type={l.type} />
               <span class="fmt">{l.format}{rec.get(l.type) && <> <span class="rec" title="Leader record against challengers">{rec.get(l.type)![0]}W {rec.get(l.type)![1]}L</span></>}</span>
@@ -106,7 +103,7 @@ const ranked = [...season.standings].sort((x, y) =>
         {ranked.map((c) => (
           <div class="row">
             <div class="who">
-              <img src={src(head(c.ign, 48))} alt="" width="36" height="36" loading="lazy" onerror={onErr} />
+              <img src={faces.get(c.ign)} alt="" width="36" height="36" loading="lazy" />
               <span class="ign">{c.ign}</span>
             </div>
             <div class="pips" aria-label={`${c.badges.length} of ${total} badges`}>
