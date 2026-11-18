@@ -106,7 +106,7 @@ export const s2Matches: Match[] = [
   ['2026-10-20', 'Electric', 'jemorfe', 1],
   ['2026-10-20', 'Poison', 'Sparklotix', 0],
   ['2026-10-20', 'Ground', 'Mondry', 0],
-  ['2026-10-20', 'Ground', 'Rod', 1],
+  ['2026-10-20', 'Ground', 'Rodolfin_03', 1],
   ['2026-10-20', 'Bug', 'Coblettt', 0],
   ['2026-10-20', 'Fairy', 'Noibby', 1],
   ['2026-10-20', 'Normal', 'Noibby', 1],
