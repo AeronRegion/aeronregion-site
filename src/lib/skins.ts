@@ -62,8 +62,17 @@ async function loadSkin(ign: string): Promise<Skin | null> {
     const p = await getJson(`https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(ign)}`);
     id = p?.id;
   }
+  if (!id) {
+    const p = await getJson(`https://playerdb.co/api/player/minecraft/${encodeURIComponent(ign)}`);
+    id = p?.data?.player?.raw_id;
+  }
   if (!id) return null;
-  const profile = await getJson(`https://sessionserver.mojang.com/session/minecraft/profile/${id}`);
+  let profile = await getJson(`https://sessionserver.mojang.com/session/minecraft/profile/${id}`);
+  if (!profile?.properties) {
+    // Mojang can refuse requests from cloud build servers; PlayerDB mirrors the same profile data
+    const p = await getJson(`https://playerdb.co/api/player/minecraft/${id}`);
+    profile = p?.data?.player;
+  }
   const prop = profile?.properties?.find((p: any) => p.name === 'textures');
   if (!prop) return null;
   const tex = JSON.parse(Buffer.from(prop.value, 'base64').toString()).textures?.SKIN;

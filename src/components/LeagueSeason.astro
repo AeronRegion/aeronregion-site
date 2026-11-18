@@ -43,7 +43,7 @@ const ranked = [...season.standings].sort((x, y) =>
       <div class="stage">
         {season.victors.map((v) => (
           <figure>
-            <img src={bodies.get(v)} alt="" width="80" height="160" loading="lazy" />
+            <img src={bodies.get(v)} data-ign={v} data-kind="body" alt="" width="80" height="160" loading="lazy" />
             <figcaption><span class="nametag">{v}</span></figcaption>
           </figure>
         ))}
@@ -55,7 +55,7 @@ const ranked = [...season.standings].sort((x, y) =>
     <h3>Champion and Elite Four</h3>
     <div class="stage">
       <figure class="champ">
-        <img src={champBody} alt="" width="96" height="192" loading="lazy" />
+        <img src={champBody} data-ign={season.champion.ign} data-kind="body" alt="" width="96" height="192" loading="lazy" />
         <figcaption>
           <span class="role">Champion</span>
           <span class="nametag">{season.champion.ign}</span>
@@ -64,7 +64,7 @@ const ranked = [...season.standings].sort((x, y) =>
       </figure>
       {season.elite4.map((e, i) => (
         <figure>
-          <img src={bodies.get(e.ign)} alt="" width="80" height="160" loading="lazy" />
+          <img src={bodies.get(e.ign)} data-ign={e.ign} data-kind="body" alt="" width="80" height="160" loading="lazy" />
           <figcaption>
             <span class="role">Elite Four {i + 1}</span>
             <span class="nametag">{e.ign}</span>
@@ -84,7 +84,7 @@ const ranked = [...season.standings].sort((x, y) =>
         <ol>
           {g.leaders.map((l) => (
             <li>
-              <img src={faces.get(l.ign)} alt="" width="40" height="40" loading="lazy" />
+              <img src={faces.get(l.ign)} data-ign={l.ign} data-kind="face" alt="" width="40" height="40" loading="lazy" />
               <span class="ign">{l.ign}</span>
               <TypeChip type={l.type} />
               <span class="fmt">{l.format}{rec.get(l.type) && <> <span class="rec" title="Leader record against challengers">{rec.get(l.type)![0]}W {rec.get(l.type)![1]}L</span></>}</span>
@@ -103,7 +103,7 @@ const ranked = [...season.standings].sort((x, y) =>
         {ranked.map((c) => (
           <div class="row">
             <div class="who">
-              <img src={faces.get(c.ign)} alt="" width="36" height="36" loading="lazy" />
+              <img src={faces.get(c.ign)} data-ign={c.ign} data-kind="face" alt="" width="36" height="36" loading="lazy" />
               <span class="ign">{c.ign}</span>
             </div>
             <div class="pips" aria-label={`${c.badges.length} of ${total} badges`}>
@@ -145,6 +145,67 @@ const ranked = [...season.standings].sort((x, y) =>
     </section>
   )}
 </div>
+
+<script>
+  // If a skin couldn't be drawn when the site was built, draw it here in the browser
+  // from the player's Mojang skin file.
+  const pending = [...document.querySelectorAll<HTMLImageElement>('img[data-ign]')].filter((i) => i.src.startsWith('data:image/svg'));
+  const skins = new Map<string, Promise<{ img: HTMLImageElement; slim: boolean } | null>>();
+  const load = (name: string) => {
+    const key = name.toLowerCase();
+    if (!skins.has(key)) skins.set(key, (async () => {
+      try {
+        const j = await (await fetch(`https://playerdb.co/api/player/minecraft/${encodeURIComponent(name)}`)).json();
+        const prop = j?.data?.player?.properties?.find((p: any) => p.name === 'textures');
+        const tex = JSON.parse(atob(prop.value)).textures.SKIN;
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = tex.url.replace('http:', 'https:'); });
+        return { img, slim: tex.metadata?.model === 'slim' };
+      } catch { return null; }
+    })());
+    return skins.get(key)!;
+  };
+  const draw = (ctx: CanvasRenderingContext2D, s: HTMLImageElement, sx: number, sy: number, w: number, h: number, dx: number, dy: number, mirror = false) => {
+    if (!mirror) return ctx.drawImage(s, sx, sy, w, h, dx, dy, w, h);
+    ctx.save(); ctx.translate(dx + w, dy); ctx.scale(-1, 1); ctx.drawImage(s, sx, sy, w, h, 0, 0, w, h); ctx.restore();
+  };
+  // outer layers: copy only fairly opaque pixels, like the game does
+  const layer = (ctx: CanvasRenderingContext2D, s: HTMLImageElement, sx: number, sy: number, w: number, h: number, dx: number, dy: number) => {
+    const t = document.createElement('canvas'); t.width = w; t.height = h;
+    const tc = t.getContext('2d')!; tc.drawImage(s, sx, sy, w, h, 0, 0, w, h);
+    const d = tc.getImageData(0, 0, w, h);
+    for (let i = 3; i < d.data.length; i += 4) d.data[i] = d.data[i] >= 128 ? 255 : 0;
+    tc.putImageData(d, 0, 0); ctx.drawImage(t, dx, dy);
+  };
+  for (const el of pending) {
+    load(el.dataset.ign!).then((skin) => {
+      if (!skin) return;
+      const { img: s, slim } = skin;
+      const c = document.createElement('canvas');
+      const ctx = c.getContext('2d')!;
+      if (el.dataset.kind === 'face') {
+        c.width = 8; c.height = 8;
+        draw(ctx, s, 8, 8, 8, 8, 0, 0); layer(ctx, s, 40, 8, 8, 8, 0, 0);
+      } else {
+        c.width = 16; c.height = 32;
+        const aw = slim ? 3 : 4, modern = s.naturalHeight === 64;
+        draw(ctx, s, 8, 8, 8, 8, 4, 0); draw(ctx, s, 20, 20, 8, 12, 4, 8);
+        draw(ctx, s, 44, 20, aw, 12, 4 - aw, 8); draw(ctx, s, 4, 20, 4, 12, 4, 20);
+        if (modern) {
+          draw(ctx, s, 36, 52, aw, 12, 12, 8); draw(ctx, s, 20, 52, 4, 12, 8, 20);
+          layer(ctx, s, 40, 8, 8, 8, 4, 0); layer(ctx, s, 20, 36, 8, 12, 4, 8);
+          layer(ctx, s, 44, 36, aw, 12, 4 - aw, 8); layer(ctx, s, 52, 52, aw, 12, 12, 8);
+          layer(ctx, s, 4, 36, 4, 12, 4, 20); layer(ctx, s, 4, 52, 4, 12, 8, 20);
+        } else {
+          layer(ctx, s, 40, 8, 8, 8, 4, 0);
+          draw(ctx, s, 44, 20, aw, 12, 12, 8, true); draw(ctx, s, 4, 20, 4, 12, 8, 20, true);
+        }
+      }
+      el.src = c.toDataURL();
+    });
+  }
+</script>
 
 <style>
   .season { display: flex; flex-direction: column; gap: 3rem; }
