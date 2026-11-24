@@ -8,7 +8,7 @@ export const challonge = 'https://challonge.com/communities/ARsmp';
 // Slideshow, shown in this order.
 export const slides = [
   { src: '/images/tournaments/group-1.webp', caption: 'Tournament night in the arena' },
-  { src: '/images/tournaments/group-regionals-draw.webp', caption: 'The Regionals Draw lineup. Your team could be next.' },
+  { src: '/images/tournaments/group-regionals-draw.webp', caption: 'The whole community, gathered for tournament day' },
   { src: '/images/tournaments/battle-mildflames-alkan55.webp', caption: 'MildFlames vs Alkan55' },
   { src: '/images/tournaments/group-3.webp', caption: 'Every finals ends with a photo. Be in the next one.' },
   { src: '/images/tournaments/battle-rain.webp', caption: 'MartinH2403 vs Neenocks' },
