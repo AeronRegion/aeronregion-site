@@ -8,6 +8,7 @@ export const challonge = 'https://challonge.com/communities/ARsmp';
 // Slideshow, shown in this order.
 export const slides = [
   { src: '/images/tournaments/group-1.webp', caption: 'Tournament night in the arena' },
+  { src: '/images/tournaments/group-regionals-draw.webp', caption: 'The Regionals Draw lineup. Your team could be next.' },
   { src: '/images/tournaments/battle-mildflames-alkan55.webp', caption: 'MildFlames vs Alkan55' },
   { src: '/images/tournaments/group-3.webp', caption: 'Every finals ends with a photo. Be in the next one.' },
   { src: '/images/tournaments/battle-rain.webp', caption: 'MartinH2403 vs Neenocks' },
@@ -31,6 +32,20 @@ export type Tournament = {
 // Newest first. The first entry is featured as the latest tournament.
 // To add one: copy a block, put it at the top, and drop its bracket image in brackets/.
 export const tournaments: Tournament[] = [
+  {
+    name: 'Regionals Draw',
+    date: '2026-11-22',
+    format: 'Single elimination, 2v2',
+    players: 8,
+    playersLabel: 'teams',
+    bracket: '/images/tournaments/brackets/2026-11-22-regionals-draw.webp',
+    link: 'https://challonge.com/rlzzk4nf',
+    podium: [
+      { place: '1st', player: 'The Swift Swamperts' },
+      { place: '2nd', player: 'Paldea’s Finest Tacos & Adobo' },
+      { place: '3rd', player: 'We Love Kalos!' },
+    ],
+  },
   {
     name: 'Double Trouble Multibattle',
     date: '2026-11-15',
