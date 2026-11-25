@@ -63,8 +63,8 @@ export const experimental = {
 export type NavItem = { label: string; href?: string; items?: { label: string; href: string }[] };
 export const nav: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'Compete', items: [{ label: 'Gym League', href: '/league/' }, { label: 'Tournaments', href: '/tournaments/' }] },
-  { label: 'Play', items: [{ label: 'Experimental server', href: '/experimental/' }, { label: 'World downloads', href: '/worlds/' }] },
+  { label: 'Battle', items: [{ label: 'Gym League', href: '/league/' }, { label: 'Tournaments', href: '/tournaments/' }] },
+  { label: 'Explore', items: [{ label: 'Experimental server', href: '/experimental/' }, { label: 'World downloads', href: '/worlds/' }] },
   { label: 'News', href: '/news/' },
 ];
 // Shown as an outlined button in the top bar, like the "Aeron Region" button on ARdex.
