@@ -66,7 +66,8 @@ export const nav: NavItem[] = [
   { label: 'Compete', items: [{ label: 'Gym League', href: '/league/' }, { label: 'Tournaments', href: '/tournaments/' }] },
   { label: 'Play', items: [{ label: 'Experimental server', href: '/experimental/' }, { label: 'World downloads', href: '/worlds/' }] },
   { label: 'News', href: '/news/' },
-  { label: 'ARdex', href: 'https://dex.aeronregion.net' },
 ];
+// Shown as an outlined button in the top bar, like the "Aeron Region" button on ARdex.
+export const dexLink = { label: 'ARdex', href: 'https://dex.aeronregion.net' };
 // Every page link, flattened (used by the footer).
-export const navLinks = nav.flatMap((n) => n.items ?? [{ label: n.label, href: n.href! }]);
+export const navLinks = [...nav.flatMap((n) => n.items ?? [{ label: n.label, href: n.href! }]), dexLink];

@@ -1,5 +1,5 @@
 ---
-import { site, nav, stores, socials } from '../config/site';
+import { site, nav, stores, socials, dexLink } from '../config/site';
 import Icon from './Icon.astro';
 const path = Astro.url.pathname;
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
@@ -17,19 +17,20 @@ const discord = socials.find((s) => s.icon === 'discord');
 
     <nav class="nav">
       {nav.map((n) => n.items ? (
-        <details class="shop group">
-          <summary class:list={['link', { active: n.items.some((x) => isActive(x.href)) }]}>{n.label} <Icon name="chevron" size={16} /></summary>
+        <div class="dd">
+          <button type="button" aria-haspopup="true" class:list={['link', { active: n.items.some((x) => isActive(x.href)) }]}>{n.label} <Icon name="chevron" size={16} /></button>
           <div class="menu left">{n.items.map((x) => <a href={x.href} aria-current={isActive(x.href) ? 'page' : undefined}>{x.label}</a>)}</div>
-        </details>
+        </div>
       ) : (
         <a href={n.href} class:list={['link', { active: isActive(n.href!) }]} aria-current={isActive(n.href!) ? 'page' : undefined}>{n.label}</a>
       ))}
-      <details class="shop">
-        <summary class="link">Shop <Icon name="chevron" size={16} /></summary>
+      <div class="dd">
+        <button type="button" aria-haspopup="true" class="link">Shop <Icon name="chevron" size={16} /></button>
         <div class="menu">
           {stores.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}
         </div>
-      </details>
+      </div>
+      <a href={dexLink.href} class="outl">{dexLink.label} <span aria-hidden="true">↗</span></a>
       {discord && <a href={discord.href} class="block" target="_blank" rel="noopener"><Icon name="discord" size={18} /> Discord</a>}
     </nav>
   </div>
@@ -42,15 +43,15 @@ const discord = socials.find((s) => s.icon === 'discord');
     const open = nav?.classList.toggle('open');
     btn.setAttribute('aria-expanded', String(!!open));
   });
-  document.addEventListener('click', (e) => {
-    document.querySelectorAll('details.shop[open]').forEach((d) => {
-      if (!d.contains(e.target as Node)) d.removeAttribute('open');
-    });
-  });
-  // opening one dropdown closes the others
-  document.querySelectorAll<HTMLDetailsElement>('details.shop').forEach((d) => d.addEventListener('toggle', () => {
-    if (d.open) document.querySelectorAll<HTMLDetailsElement>('details.shop[open]').forEach((o) => { if (o !== d) o.open = false; });
+  // Dropdowns open on hover (desktop) or tap; tapping elsewhere closes them.
+  document.querySelectorAll<HTMLElement>('.dd > button').forEach((b) => b.addEventListener('click', () => {
+    const box = b.parentElement!; const was = box.classList.contains('open');
+    document.querySelectorAll('.dd.open').forEach((x) => x.classList.remove('open'));
+    if (!was) box.classList.add('open');
   }));
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.dd.open').forEach((d) => { if (!d.contains(e.target as Node)) d.classList.remove('open'); });
+  });
 </script>
 
 <style>
@@ -66,7 +67,14 @@ const discord = socials.find((s) => s.icon === 'discord');
   .link::-webkit-details-marker { display: none; }
   .link:hover { color: #fff; }
   .link.active { color: #fff; border-bottom-color: #59c4fb; }
-  .shop { position: relative; }
+  .dd { position: relative; }
+  .dd > button { font: inherit; font-family: var(--font-ui); font-weight: 700; font-size: 1.02rem; color: var(--on-brick); background: none; border: 0; border-bottom: 3px solid transparent; }
+  .dd > button.active { color: #fff; border-bottom-color: #59c4fb; }
+  .dd > .menu { display: none; }
+  .dd.open > .menu, .dd:focus-within > .menu { display: grid; }
+  @media (hover: hover) and (min-width: 1201px) { .dd:hover > .menu { display: grid; } }
+  .outl { font-family: var(--font-ui); font-weight: 700; font-size: .92rem; color: var(--on-brick); text-decoration: none; padding: .32rem .8rem; border: 2px solid var(--brick); white-space: nowrap; }
+  .outl:hover { background: var(--brick); color: #fff; }
   .menu {
     position: absolute; right: 0; top: 100%; min-width: 220px;
     background: #1d0c10; border: 2px solid #000; padding: .3rem; display: grid;
@@ -89,5 +97,6 @@ const discord = socials.find((s) => s.icon === 'discord');
     .nav.open { display: flex; }
     .link { height: auto; margin-bottom: 0; }
     .menu { position: static; margin-top: .5rem; }
+    .dd > .menu { display: grid; }
   }
 </style>
