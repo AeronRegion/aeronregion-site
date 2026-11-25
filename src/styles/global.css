@@ -1,8 +1,4 @@
-@import '@fontsource/bungee';
-@import '@fontsource-variable/nunito';
-@import '@fontsource/chakra-petch/500.css';
-@import '@fontsource/chakra-petch/600.css';
-@import '@fontsource/chakra-petch/700.css';
+@import '@fontsource-variable/rubik';
 @import './tokens.css';
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -24,7 +20,7 @@ a { color: var(--brick); text-decoration-thickness: 2px; text-underline-offset: 
 a:hover { color: var(--ink); }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
-h1, h2 { font-family: var(--font-pixel); font-weight: 400; line-height: 1.05; margin: 0 0 .55em; letter-spacing: 0; }
+h1, h2 { font-family: var(--font-pixel); font-weight: 800; line-height: 1.05; margin: 0 0 .55em; letter-spacing: 0; }
 h1 { font-size: clamp(2.2rem, 5.5vw, 3.8rem); }
 h2 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
 h3 { font-family: var(--font-ui); font-weight: 700; font-size: 1.3rem; line-height: 1.25; margin: 0 0 .5em; }
@@ -48,6 +44,7 @@ p { margin: 0 0 1em; }
   background: var(--tag-bg);
   color: var(--tag-fg);
   font-family: var(--font-pixel);
+  font-weight: 700;
   padding: .1em .45em .15em;
 }
 

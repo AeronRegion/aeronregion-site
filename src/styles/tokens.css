@@ -26,9 +26,9 @@
   --tag-fg:       #ffffff;
 
   /* Type */
-  --font-pixel:   'Bungee', 'Chakra Petch', sans-serif;                 /* headings only */
-  --font-ui:      'Chakra Petch', 'Segoe UI', system-ui, sans-serif;     /* blocky but readable: nav, buttons, labels, small headings */
-  --font-body:    'Nunito Variable', 'Nunito', system-ui, sans-serif;
+  --font-pixel:   'Rubik Variable', 'Rubik', system-ui, sans-serif;   /* headings, weight 800 */
+  --font-ui:      'Rubik Variable', 'Rubik', system-ui, sans-serif;   /* nav, buttons, labels */
+  --font-body:    'Rubik Variable', 'Rubik', system-ui, sans-serif;
 
   /* Shape — blocks are square; only plates get stepped "pixel" corners */
   --px:           4px;      /* one "pixel" at site scale */
