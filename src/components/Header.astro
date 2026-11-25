@@ -16,8 +16,13 @@ const discord = socials.find((s) => s.icon === 'discord');
     <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><Icon name="menu" size={28} /></button>
 
     <nav class="nav">
-      {nav.map((n) => (
-        <a href={n.href} class:list={['link', { active: isActive(n.href) }]} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+      {nav.map((n) => n.items ? (
+        <details class="shop group">
+          <summary class:list={['link', { active: n.items.some((x) => isActive(x.href)) }]}>{n.label} <Icon name="chevron" size={16} /></summary>
+          <div class="menu left">{n.items.map((x) => <a href={x.href} aria-current={isActive(x.href) ? 'page' : undefined}>{x.label}</a>)}</div>
+        </details>
+      ) : (
+        <a href={n.href} class:list={['link', { active: isActive(n.href!) }]} aria-current={isActive(n.href!) ? 'page' : undefined}>{n.label}</a>
       ))}
       <details class="shop">
         <summary class="link">Shop <Icon name="chevron" size={16} /></summary>
@@ -42,6 +47,10 @@ const discord = socials.find((s) => s.icon === 'discord');
       if (!d.contains(e.target as Node)) d.removeAttribute('open');
     });
   });
+  // opening one dropdown closes the others
+  document.querySelectorAll<HTMLDetailsElement>('details.shop').forEach((d) => d.addEventListener('toggle', () => {
+    if (d.open) document.querySelectorAll<HTMLDetailsElement>('details.shop[open]').forEach((o) => { if (o !== d) o.open = false; });
+  }));
 </script>
 
 <style>
@@ -63,6 +72,8 @@ const discord = socials.find((s) => s.icon === 'discord');
     background: #1d0c10; border: 2px solid #000; padding: .3rem; display: grid;
   }
   .menu a { padding: .5rem .8rem; text-decoration: none; color: var(--on-brick); font-weight: 600; }
+  .menu.left { right: auto; left: -.8rem; }
+  .menu a[aria-current='page'] { color: #fff; box-shadow: inset 3px 0 0 #59c4fb; }
   .menu a:hover { background: var(--brick); outline: 2px solid #fff; outline-offset: -2px; }
   .block { font-size: 1rem; padding: .4rem .9rem; }
   .icon { image-rendering: pixelated; }

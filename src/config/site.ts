@@ -59,13 +59,14 @@ export const experimental = {
   ],
 };
 
-// Top navigation — order here is the order shown.
-export const nav = [
+// Top navigation — order here is the order shown. An entry with `items` becomes a dropdown.
+export type NavItem = { label: string; href?: string; items?: { label: string; href: string }[] };
+export const nav: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'Gym League', href: '/league/' },
-  { label: 'Tournaments', href: '/tournaments/' },
-  { label: 'Experimental', href: '/experimental/' },
-  { label: 'Worlds', href: '/worlds/' },
+  { label: 'Compete', items: [{ label: 'Gym League', href: '/league/' }, { label: 'Tournaments', href: '/tournaments/' }] },
+  { label: 'Play', items: [{ label: 'Experimental server', href: '/experimental/' }, { label: 'World downloads', href: '/worlds/' }] },
   { label: 'News', href: '/news/' },
   { label: 'ARdex', href: 'https://dex.aeronregion.net' },
 ];
+// Every page link, flattened (used by the footer).
+export const navLinks = nav.flatMap((n) => n.items ?? [{ label: n.label, href: n.href! }]);

@@ -1,5 +1,5 @@
 ---
-import { site, socials, stores, nav } from '../config/site';
+import { site, socials, stores, navLinks } from '../config/site';
 import Icon from './Icon.astro';
 const year = new Date().getFullYear();
 ---
@@ -14,7 +14,7 @@ const year = new Date().getFullYear();
       </div>
     </div>
     <nav aria-label="Footer">
-      {nav.slice(1).map((n) => <a href={n.href}>{n.label}</a>)}
+      {navLinks.slice(1).map((n) => <a href={n.href}>{n.label}</a>)}
     </nav>
     <nav aria-label="Stores">
       {stores.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}
