@@ -67,5 +67,5 @@ export const nav = [
   { label: 'Experimental', href: '/experimental/' },
   { label: 'Worlds', href: '/worlds/' },
   { label: 'News', href: '/news/' },
-  { label: 'Dex', href: 'https://dex.aeronregion.net' },
+  { label: 'ARdex', href: 'https://dex.aeronregion.net' },
 ];
