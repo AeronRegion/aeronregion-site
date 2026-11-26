@@ -171,7 +171,7 @@ export function drawBody({ png, slim }: Skin, width: number) {
 }
 
 const placeholder = (w: number, h: number) =>
-  `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="100%" height="100%" fill="#c9cdd3"/></svg>`)}`;
+  `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="100%" height="100%" fill="#c9b0a8"/></svg>`)}`;
 
 export async function face(ign: string, size = 48) {
   const s = await skinOf(ign);
