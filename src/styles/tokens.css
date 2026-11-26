@@ -8,18 +8,20 @@
    ───────────────────────────────────────────────────────────── */
 :root {
   /* Color */
-  --petal:        #f4dcd8;  /* page background */
-  --petal-deep:   #eac3c0;  /* hover rows, subtle fills */
+  --petal:        #f2f3f5;  /* page background */
+  --petal-deep:   #e1e4e8;  /* hover rows, subtle fills */
   --blossom:      #e895b0;  /* primary buttons */
-  --ink:          #2e1a20;  /* text, outlines */
-  --ink-soft:     #6b4a50;  /* secondary text on petal */
-  --brick:        #5a2731;  /* dark bands, nav, footer */
-  --brick-deep:   #351820;
-  --on-brick:     #f6e7e2;
-  --on-brick-soft:#cfa9a6;
+  --ink:          #1f2329;  /* text, outlines */
+  --ink-soft:     #5d6570;  /* secondary text on petal */
+  --brick:        #3b4049;  /* dark bands, nav, footer */
+  --brick-deep:   #23262b;
+  --on-brick:     #f2f3f5;
+  --on-brick-soft:#aab1bb;
   --teal:         #56c6bb;  /* online / live */
   --teal-ink:     #1f6f67;  /* teal text on petal */
   --leaf:         #b4c07c;
+  --row:          #ffffff;
+  --chip:         #e8eaed;
 
   /* Nametag plate (the floating label above players) */
   --tag-bg:       rgb(0 0 0 / .32);
@@ -38,10 +40,10 @@
 /* Dark mode: <html data-theme="dark">, set by the header toggle or the system setting */
 html[data-theme='dark'] {
   color-scheme: dark;
-  --petal:        #1c1417;
-  --petal-deep:   #3a2a31;
-  --ink:          #f1e3e1;
-  --ink-soft:     #b7a0a4;
+  --petal:        #16181b;
+  --petal-deep:   #2e3238;
+  --ink:          #eceef1;
+  --ink-soft:     #a3aab4;
   --teal-ink:     #7fd8ce;
-  --row:          #261b20;
+  --row:          #202328;
 }

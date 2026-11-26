@@ -60,8 +60,8 @@ p { margin: 0 0 1em; }
 }
 .block:hover { color: var(--ink); background: #f2acc3; outline: 2px solid #fff; outline-offset: -4px; }
 .block:active { box-shadow: inset -3px -3px 0 rgb(255 255 255 / .35), inset 3px 3px 0 rgb(0 0 0 / .25); }
-.block.stone { background: #b9aaa6; }
-.block.stone:hover { background: #cbbdb9; }
+.block.stone { background: #c3c8cf; }
+.block.stone:hover { background: #d4d8de; }
 .block[aria-disabled='true'] { background: #6f6361; color: #e2d8d6; pointer-events: none; box-shadow: none; }
 
 .band { background: var(--brick); color: var(--on-brick); }
@@ -82,4 +82,4 @@ p { margin: 0 0 1em; }
 
 /* dark mode touches */
 html[data-theme='dark'] .block, html[data-theme='dark'] .block:hover { color: #2e1a20; }
-html[data-theme='dark'] { --chip: #3a2d33; }
+html[data-theme='dark'] { --chip: #30343a; }
