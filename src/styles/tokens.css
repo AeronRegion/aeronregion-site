@@ -34,3 +34,14 @@
   --px:           4px;      /* one "pixel" at site scale */
   --max-w:        1080px;
 }
+
+/* Dark mode: <html data-theme="dark">, set by the header toggle or the system setting */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --petal:        #1c1417;
+  --petal-deep:   #3a2a31;
+  --ink:          #f1e3e1;
+  --ink-soft:     #b7a0a4;
+  --teal-ink:     #7fd8ce;
+  --row:          #261b20;
+}

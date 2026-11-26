@@ -30,6 +30,7 @@ const discord = socials.find((s) => s.icon === 'discord');
           {stores.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}
         </div>
       </div>
+      <button type="button" class="mode" id="mode" aria-label="Switch to dark mode" title="Dark mode"><span class="moon" aria-hidden="true">☾</span><span class="sun" aria-hidden="true">☀</span></button>
       <a href={dexLink.href} class="outl">{dexLink.label} <span aria-hidden="true">↗</span></a>
       {discord && <a href={discord.href} class="block" target="_blank" rel="noopener"><Icon name="discord" size={18} /> Discord</a>}
     </nav>
@@ -37,6 +38,15 @@ const discord = socials.find((s) => s.icon === 'discord');
 </header>
 
 <script>
+  const setTheme = (t: string) => {
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem('theme', t); } catch {}
+    const host = location.hostname.endsWith('aeronregion.net') ? '; domain=.aeronregion.net' : '';
+    document.cookie = `theme=${t}; path=/; max-age=31536000; samesite=lax${host}`;
+  };
+  const modeBtn = document.getElementById('mode')!;
+  const label = () => { const dark = document.documentElement.dataset.theme === 'dark'; modeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode'); modeBtn.title = dark ? 'Light mode' : 'Dark mode'; };
+  label(); modeBtn.addEventListener('click', () => { setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); label(); });
   const btn = document.querySelector('.menu-btn');
   const nav = document.querySelector('.nav');
   btn?.addEventListener('click', () => {
@@ -75,6 +85,11 @@ const discord = socials.find((s) => s.icon === 'discord');
   @media (hover: hover) and (min-width: 1201px) { .dd:hover > .menu { display: grid; } }
   .outl { font-family: var(--font-ui); font-weight: 700; font-size: .92rem; color: var(--on-brick); text-decoration: none; padding: .32rem .8rem; border: 2px solid var(--brick); white-space: nowrap; }
   .outl:hover { background: var(--brick); color: #fff; }
+  .mode { background: none; border: 2px solid var(--brick); color: var(--on-brick); font-size: 1rem; line-height: 1; width: 2.1rem; height: 2.1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+  .mode:hover { background: var(--brick); }
+  .mode .sun { display: none; }
+  :global(html[data-theme='dark']) .mode .sun { display: inline; }
+  :global(html[data-theme='dark']) .mode .moon { display: none; }
   .menu {
     position: absolute; right: 0; top: 100%; min-width: 220px;
     background: #1d0c10; border: 2px solid #000; padding: .3rem; display: grid;

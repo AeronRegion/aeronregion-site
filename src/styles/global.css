@@ -79,3 +79,7 @@ p { margin: 0 0 1em; }
 .reveal.in { opacity: 1; transform: none; transition: opacity .32s ease-out, transform .32s cubic-bezier(.2, .8, .2, 1); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* dark mode touches */
+html[data-theme='dark'] .block, html[data-theme='dark'] .block:hover { color: #2e1a20; }
+html[data-theme='dark'] { --chip: #3a2d33; }

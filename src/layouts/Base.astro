@@ -22,6 +22,13 @@ const og = new URL('/images/og.jpg', site.url).href;
     <meta property="og:description" content={description} />
     <meta property="og:image" content={og} />
     <meta name="theme-color" content="#2e1a20" />
+    <script is:inline>
+      // theme before paint: shared cookie (so aeronregion.net and ARdex match), then this browser, then the system setting
+      (function () { var m = document.cookie.match(/(?:^|; )theme=(dark|light)/), t = m && m[1];
+        if (!t) { try { t = localStorage.getItem('theme'); } catch (e) {} }
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t; })();
+    </script>
   </head>
   <body>
     <Header />
