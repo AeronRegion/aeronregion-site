@@ -14,6 +14,7 @@ Loosely modeled on hermitcraft.com: world downloads, tournaments, server info, n
 - EDIT existing files. Never rewrite a whole file from scratch.
 - Check the rules below before changing anything. If a request conflicts with one, ask first.
 - After every change: add a line to docs/changelog.md; record design decisions here.
+- Before pushing any visual change: `npm run build && npm run check:mobile` (390px phone check, screenshots in .cache/mobile/). Also look at 360px: the header must keep the name, dark-mode, ARdex and Discord on row 1 and all tabs on row 2.
 
 ## Design rules
 - Font: Rubik. Do not switch to Bungee, Chakra Petch, or other "gamer" display fonts.
