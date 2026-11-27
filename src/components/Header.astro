@@ -32,7 +32,7 @@ const discord = socials.find((s) => s.icon === 'discord');
       </div>
       <button type="button" class="mode" id="mode" aria-label="Switch to dark mode" title="Dark mode"><span class="moon" aria-hidden="true">☾</span><span class="sun" aria-hidden="true">☀</span></button>
       <a href={dexLink.href} class="outl">{dexLink.label} <span aria-hidden="true">↗</span></a>
-      {discord && <a href={discord.href} class="block" target="_blank" rel="noopener"><Icon name="discord" size={18} /> Discord</a>}
+      {discord && <a href={discord.href} class="block" target="_blank" rel="noopener"><Icon name="discord" size={18} /> <span class="lbl">Discord</span></a>}
     </nav>
   </div>
 </header>
@@ -102,16 +102,38 @@ const discord = socials.find((s) => s.icon === 'discord');
   .icon { image-rendering: pixelated; }
   .menu-btn { display: none; background: none; border: 0; color: var(--on-brick); cursor: pointer; }
 
+  /* narrower screens: no hamburger. Row 1 = logo + dark mode, ARdex, Discord; row 2 = the tabs, always visible */
   @media (max-width: 1200px) {
-    .menu-btn { display: block; }
-    .nav {
-      display: none; position: absolute; top: 59px; left: 0; right: 0;
-      flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.25rem;
-      background: var(--brick-deep); border-bottom: 3px solid #000;
-    }
-    .nav.open { display: flex; }
-    .link { height: auto; margin-bottom: 0; }
-    .menu { position: static; margin-top: .5rem; }
-    .dd > .menu { display: grid; }
+    .menu-btn { display: none; }
+    .bar { flex-wrap: wrap; height: auto; padding-top: .4rem; column-gap: .5rem; justify-content: flex-start; }
+    .nav { display: contents; }
+    .brand { flex: 1 1 0; min-width: 0; order: 0; height: 44px; overflow: hidden; }
+    .mode, .outl, .block { order: 1; }
+    .block { padding: .35rem .55rem; font-size: .9rem; }
+    .nav > .link, .nav > .dd { order: 3; }
+    /* line break between row 1 (logo + buttons) and row 2 (tabs) */
+    .nav::before { content: ''; order: 2; flex-basis: 100%; height: 0; }
+    .link, .dd > button { height: 40px; font-size: .95rem; }
+    .nav > .link, .nav > .dd { margin-right: .9rem; }
+    .menu { position: absolute; top: 100%; left: 0; right: auto; z-index: 60; }
+    .menu.left { left: 0; }
+    .dd > .menu { display: none; }
+    .dd.open > .menu { display: grid; }
   }
+  @media (max-width: 480px) {
+    /* the name shrinks instead of running into the buttons (iPhone mini / SE are 360-375px) */
+    .brand { font-size: 1.05rem; flex: 1 1 0; min-width: 0; gap: .4rem; }
+    .brand :global(img) { width: 30px; height: 30px; }
+    .outl { padding: .3rem .55rem; font-size: .85rem; }
+    .block .lbl { display: none; }
+    .nav > .link, .nav > .dd { margin-right: .3rem; }
+    .link, .dd > button { font-size: .84rem; }
+  }
+  @media (max-width: 380px) {
+    .brand { font-size: .95rem; }
+    .outl { padding: .25rem .45rem; }
+    .nav > .link, .nav > .dd { margin-right: .1rem; }
+    .link, .dd > button { font-size: .78rem; }
+  }
+
 </style>

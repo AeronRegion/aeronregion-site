@@ -83,3 +83,5 @@ p { margin: 0 0 1em; }
 /* dark mode touches */
 html[data-theme='dark'] .block, html[data-theme='dark'] .block:hover { color: #2e1a20; }
 html[data-theme='dark'] { --chip: #3a2d33; }
+/* slide-in animations must not make the page wider than the screen on phones */
+html, body { overflow-x: clip; }

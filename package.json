@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check:mobile": "node scripts/check-mobile.mjs"
   },
   "dependencies": {
     "@fontsource-variable/rubik": "^5.3.0",

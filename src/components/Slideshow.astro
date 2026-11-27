@@ -4,7 +4,7 @@
 const { slides, label = 'Photos' } = Astro.props as { slides: { src: string; caption: string }[]; label?: string };
 ---
 <section class="show" aria-roledescription="carousel" aria-label={label}>
-  <div class="track" tabindex="0">
+  <div class="track" tabindex="0" data-scroll-ok>
     {slides.map((s, i) => (
       <figure class="slide" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`}>
         <img src={s.src} alt={s.caption} loading={i === 0 ? 'eager' : 'lazy'} />

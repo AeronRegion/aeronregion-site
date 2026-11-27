@@ -21,7 +21,7 @@ Loosely modeled on hermitcraft.com: world downloads, tournaments, server info, n
 - A human designer helps with graphics. Don't replace their assets without asking.
 
 ## Content rules
-- Main server IP: hmac.minecraft.best
+- Main server IP: ar.minecraft.best (src/config/site.ts)
 - Experimental server: ar-2.minecraft.best. Request access via Discord only.
   Not whitelisted, not publicly advertised. Keep it low-key on the site.
 - Stores are SEPARATE links, never merged:
